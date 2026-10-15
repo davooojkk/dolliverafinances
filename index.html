@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es-uy">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>dollivera - home</title>
+  </head>
+
+  <body>
+    <header class="header">
+      <nav aria-label="lista del header">
+        <ul class="header-list">
+          <li><p>dollivera</p> <span>finances</span></li>
+          <li><a href="https://instagram.com/davotech.uy">instagram</a></li>
+          <li>Gracias por utilizar!</li>
+        </ul>
+      </nav>
+    </header>
+
+    <section class="gastos-list-block" aria-label="Lista completa de gastos">
+      <div class="label-gastos-list">
+        <p>Todos los gastos</p>
+      </div>
+      <div class="gastos-form-block">
+        <form id="gastos-form">
+            <label for="descripcion">
+              Descripción del Gasto:
+            </label>
+          <input id="descripcion" type="text" placeholder="Ej: Compras Supermercado..." required>
+            <label for="moneda">
+              Moneda:
+            </label>
+          <input id="moneda" type="text" placeholder="Ej: BRL..." required>
+            <label for="monto">
+              Monto:
+            </label>
+          <input id="monto" type="number" placeholder="Ej: 350..." required>
+            <label for="categoria">
+                Categoria:
+            </label>
+          <input id="categoria" type="text" placeholder="Ej:insumos" required>
+            <label for="fecha">
+              Fecha:
+            </label>
+          <input id="fecha" type="date" required>
+          <button type="submit">Add</button>
+        </form>
+      </div>
+      <div class="gastos-list">
+      </div>
+    </section>
+    <script type="module" src="./js/main.js"></script>
+  </body>
+</html>
