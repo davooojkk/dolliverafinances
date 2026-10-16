@@ -7,4 +7,7 @@ import {
 
 import { renderGastos } from "./modules/render.js";
 
+import { initSubmitFormulario } from "./modules/formEvents.js";
+
+initSubmitFormulario()
 renderGastos(obtenerGastos());

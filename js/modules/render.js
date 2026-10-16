@@ -12,18 +12,17 @@ export function renderGastos(gastos) {
   gastosOrdenados.forEach((gasto) => {
     const tarjeta = document.createElement("div");
     bloqueGastos.appendChild(tarjeta);
-    const titulo = document.createElement("p");
+    const descripcion = document.createElement("p");
     const categoria = document.createElement("p");
     const moneda = document.createElement("span");
     const monto = document.createElement("span")
     const fecha = document.createElement("span");
-    tarjeta.append(titulo, categoria, monto, moneda, fecha);
-    titulo.innerText = gasto.nombre;
+    tarjeta.append(descripcion, categoria, monto, moneda, fecha);
+    descripcion.innerText = gasto.descripcion;
     categoria.innerText = gasto.categoria;
     moneda.innerText = gasto.moneda;
     monto.innerText = gasto.monto;
-    fecha.innerText = gasto.fecha;
-
+    fecha.innerText = gasto.fecha.split('-', 3).reverse().join('/');
   });
 }
 
