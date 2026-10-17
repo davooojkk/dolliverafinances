@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css">
     <title>dollivera - home</title>
   </head>
 
@@ -29,20 +30,34 @@
             <label for="moneda">
               Moneda:
             </label>
-          <input id="moneda" type="text" placeholder="Ej: BRL..." required>
+          <select name="moneda" id="moneda">
+            <option value="brl">Reales Brasileros</option>
+            <option value="uyu">Pesos Uruguayos</option>
+            <option value="usd">Dolares Estadounidenses</option>
+          </select>
             <label for="monto">
               Monto:
             </label>
-          <input id="monto" type="number" placeholder="Ej: 350..." required>
+          <input id="monto" type="number" min="0" step="0.01"  placeholder="Ej: 350..." required>
             <label for="categoria">
                 Categoria:
             </label>
-          <input id="categoria" type="text" placeholder="Ej:insumos" required>
+          <select name="categoria" id="categoria">
+              <option value="gasto fijo">gasto fijo</option>
+              <option value="insumos">insumos</option>
+              <option value="consumo">consumo</option>
+              <option value="salud-cuidado">salud-cuidado</option>
+              <option value="fastfood">fastfood</option>
+              <option value="hogar">hogar</option>
+              <option value="transporte">transporte</option>
+              <option value="mascota">mascota</option>
+          </select>
             <label for="fecha">
               Fecha:
             </label>
           <input id="fecha" type="date" required>
           <button type="submit">Add</button>
+          <p id="mensaje-error">Tu gasto no pudo ser ingresado! Verifica el monto ingresado.</p>
         </form>
       </div>
       <div class="gastos-list">

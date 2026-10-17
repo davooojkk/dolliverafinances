@@ -4,10 +4,11 @@ import { renderGastos } from "./render.js";
 
 
 const formulario = document.querySelector('#gastos-form'); // seleccionamos el formulario del evento.
+const mensajeError = document.querySelector('#mensaje-error');
 
 function submitFormulario(event) {
     event.preventDefault();
-    const inputs = document.querySelectorAll('#gastos-form input');
+    const inputs = document.querySelectorAll('#gastos-form input, #gastos-form select');
     let nuevoGasto = {};
     inputs.forEach(input => {
         let propiedad = input.id;
@@ -19,8 +20,12 @@ function submitFormulario(event) {
 
         nuevoGasto[propiedad] = valor;
     });
-    agregarGastos(nuevoGasto);
-    renderGastos(obtenerGastos());
+    const gastoAgregado = agregarGastos(nuevoGasto);
+    if(gastoAgregado === true) {
+        renderGastos(obtenerGastos());
+    } else {
+        mensajeError.classList.add('error');
+    };
 };
 
 export function initSubmitFormulario() {

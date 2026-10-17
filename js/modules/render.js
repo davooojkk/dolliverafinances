@@ -2,8 +2,8 @@ export function renderGastos(gastos) {
 
   const bloqueGastos = document.querySelector(".gastos-list");
   const gastosOrdenados = gastos.toSorted((a, b) => {
-    const fechaA = a.fecha.split("/").reverse().join("-");
-    const fechaB = b.fecha.split("/").reverse().join("-");
+  const fechaA = a.fecha.split("/").reverse().join("-");
+  const fechaB = b.fecha.split("/").reverse().join("-");
 
     return fechaB.localeCompare(fechaA);
   });

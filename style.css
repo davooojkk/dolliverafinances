@@ -1,0 +1,7 @@
+#mensaje-error {
+    display: none;
+}
+
+#mensaje-error.error {
+    display:  block;
+}
