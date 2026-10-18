@@ -1,3 +1,5 @@
+import { monedasValidas, categoriasValidas } from "./formData";
+
 // array que guarda los gastos en objetos y una función que devuelve la misma array
 
 let gastos = [];
@@ -5,8 +7,6 @@ let gastos = [];
 export function obtenerGastos() {
   return gastos;
 };
-
-import { monedasValidas, categoriasValidas } from "./formData";
 
 export function validarGastos(nuevoGasto) { // para validar el gasto y no sobrecargar una funcion
     if(!(Number.isFinite(nuevoGasto.monto) && nuevoGasto.monto > 0)) {
@@ -41,6 +41,7 @@ export function agregarGastos(nuevoGasto) {
   const addGasto = {...nuevoGasto, id: randomNumber,}
    gastos = [...gastos, addGasto];
    return true;
+};
 };
 
 // con esta función seremos capaces de eliminar gastos del array.
