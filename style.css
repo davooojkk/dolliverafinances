@@ -2,32 +2,64 @@
 
 /* ============================================================================
    dollivera · finances — style.css
-   Dirección: minimalismo tecno. Negro, aire y filetes finos;
-               el rojo aparece solo donde comunica algo.
+   Dirección: minimalismo tecno. Grises suaves, aire y filetes finos;
+              el rojo aparece solo donde comunica algo.
    Fuentes:    Inter → títulos y subtítulos
                IBM Plex Mono → cifras, CTA y body text
-   Paleta:     #000000 · #830000 · #BC0202 · #FF0000
-   Nota:       --papel (#f2f2f2) es el único color fuera de la paleta pedida:
-               es el texto primario sobre negro (17:1). Sin él, el único texto
-               que cumple AA sobre #000 es #FF0000 y todo se aplana a un tono.
+   Paleta:     #000000 · #830000 · #BC0202 · #FF0000 · #F2F2F2
+               + escala --g-06…--g-90 derivada (negro + % de papel)
+               + degradado leve de fondo: --fondo-alto → --fondo
+   Contraste:  texto ≥ 4.5:1 · bordes de control ≥ 3:1 (WCAG AA)
+   Nota:       Todo color, espacio y tipografía vive en tokens: ninguna
+               regla declara hex, px de layout ni fuentes sueltas.
    ============================================================================ */
 
 /* ---------------------------------------------------------------- 1. Tokens */
 
 :root {
-  /* --- marca --- */
+  /* --- marca: núcleo intacto --- */
   --negro: #000000;
-  --rojo-hondo: #830000; /* tintes muy sutiles */
-  --rojo: #bc0202; /* acento primario: CTA, cifras */
+  --rojo-hondo: #830000; /* presión / active */
+  --rojo: #bc0202; /* acento primario: CTA */
   --rojo-vivo: #ff0000; /* interactivo: foco, hover, alertas */
+  --papel: #f2f2f2; /* base neutra de la que se deriva toda la escala */
 
-  /* --- neutros derivados (sin hex nuevos sueltos) --- */
-  --papel: #f2f2f2; /* texto primario */
+  /* --- escala de grises expandida: negro + % de papel ---
+     10 peldaños en vez de 4, para poder bajar el contraste por capas
+     sin inventar hex sueltos. --g-06 es el lienzo y --g-09 el techo
+     del degradado: más arriba el rojo de las cifras baja de 4.5:1. */
+  --g-06: color-mix(in srgb, var(--papel) 6%, var(--negro));
+  --g-09: color-mix(in srgb, var(--papel) 9%, var(--negro));
+  --g-12: color-mix(in srgb, var(--papel) 12%, var(--negro));
+  --g-20: color-mix(in srgb, var(--papel) 20%, var(--negro));
+  --g-28: color-mix(in srgb, var(--papel) 28%, var(--negro));
+  --g-44: color-mix(in srgb, var(--papel) 44%, var(--negro));
+  --g-52: color-mix(in srgb, var(--papel) 52%, var(--negro));
+  --g-60: color-mix(in srgb, var(--papel) 60%, var(--negro));
+  --g-75: color-mix(in srgb, var(--papel) 75%, var(--negro));
+  --g-90: color-mix(in srgb, var(--papel) 90%, var(--negro));
+
+  /* --- semánticos: capas de gris suaves sobre lienzo casi-negro ---
+     #000 puro da 21:1 contra el texto: duro a la vista y sin "aire".
+     Cotas WCAG respetadas: texto ≥ 4.5:1 · bordes de control ≥ 3:1.
+     El fondo es un degradado leve (top → base) anclado al viewport:
+     así el header sticky siempre coincide con el tono de su detrás. */
+  --fondo: var(--g-06); /* lienzo: base del degradado */
+  --fondo-alto: var(--g-09); /* arranque del degradado + hover de fila */
+  --superficie: var(--g-12); /* paneles */
+  --filete: var(--g-20); /* divisores decorativos */
+  --filete-control: var(--g-44); /* bordes de control ≈ 3.7:1 (WCAG 1.4.11) */
+  --filete-hover: var(--g-52); /* borde de control en hover ≈ 4.9:1 */
+  --humo: var(--g-60); /* texto tenue ≈ 6.1:1 */
+  --texto: var(--g-90); /* texto secundario ≈ 13.7:1 */
+
+  /* extensión vertical del degradado de fondo */
+  --grad-fin: 60vh;
+
+  /* --- rojo dato: el rojo vivo en cifras largas pesa visualmente;
+     un 12% de papel lo suaviza sin salirse de la paleta (≈4.7:1) --- */
+  --rojo-cifra: color-mix(in srgb, var(--rojo-vivo) 88%, var(--papel));
   --tinta: var(--negro); /* texto sobre rojo */
-  --humo: color-mix(in srgb, var(--papel) 62%, var(--negro)); /* texto tenue ≈ 7:1 */
-  --superficie: color-mix(in srgb, var(--papel) 6%, var(--negro)); /* paneles */
-  --filete: color-mix(in srgb, var(--papel) 16%, var(--negro)); /* divisores decorativos */
-  --filete-control: color-mix(in srgb, var(--papel) 42%, var(--negro)); /* bordes de control ≈ 3.8:1 */
 
   /* --- tipografía --- */
   --font-titulo: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -57,7 +89,7 @@
   --track-micro: 0.16em;
   --track-cifra: 0.02em;
 
-  /* --- espacio (escala 4-8-12-16-24-32-48-64) --- */
+  /* --- espacio (escala 4-8-12-16-24-32-48-64 + respiro fluido) --- */
   --e-1: 4px;
   --e-2: 8px;
   --e-3: 12px;
@@ -66,6 +98,13 @@
   --e-6: 32px;
   --e-7: 48px;
   --e-8: 64px;
+
+  /* padding que se contrae con el viewport: sin escalones bruscos
+     entre breakpoints, el aire se gana solo donde hay ancho */
+  --pad-x: clamp(var(--e-4), 5vw, var(--e-6));
+  --pad-y: clamp(var(--e-5), 6vw, var(--e-7));
+  --pad-panel: clamp(var(--e-4), 3vw + var(--e-2), var(--e-6));
+  --gap-seccion: clamp(var(--e-6), 5vw, var(--e-7));
 
   /* --- estructura --- */
   --radio: 4px;
@@ -99,19 +138,33 @@
 
 html {
   -webkit-text-size-adjust: 100%;
-  background: var(--negro); /* evita el flash blanco al hacer overscroll */
+  background-color: var(--fondo); /* evita el flash blanco al hacer overscroll */
 }
 
 body {
   min-height: 100vh;
   min-height: 100dvh; /* alturas dinámicas en móvil */
-  background: var(--negro);
+  /* sin background: taparía la capa negativa del degradado de abajo */
   color: var(--papel);
   font-family: var(--font-mono);
   font-size: var(--t-cuerpo);
   font-weight: var(--w-cuerpo);
   line-height: var(--lh-cuerpo);
-  scrollbar-color: var(--filete-control) var(--negro);
+  scrollbar-color: var(--filete-control) var(--fondo);
+}
+
+/* degradado leve de fondo: gris claro arriba → base abajo.
+   position: fixed → anclado al viewport, no al documento: el header
+   sticky (tono --fondo-alto) siempre calza con lo que tiene detrás.
+   z-index negativo → queda bajo todo el contenido pero sobre el
+   background del canvas (html). */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--fondo-alto) 0%, var(--fondo) var(--grad-fin));
+  pointer-events: none;
 }
 
 img,
@@ -147,18 +200,18 @@ ul {
   position: sticky;
   top: 0;
   z-index: var(--z-alto);
-  background: var(--negro);
+  background: var(--fondo-alto); /* igual al arranque del degradado: sin costura */
   border-bottom: var(--hairline) solid var(--filete);
 }
 
 .header-list {
   max-width: var(--maxw);
   margin-inline: auto;
-  padding: var(--e-5);
+  padding: clamp(var(--e-3), 2vw, var(--e-5)) var(--pad-x);
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  gap: var(--e-3) var(--e-6);
+  gap: var(--e-2) var(--e-5);
   flex-wrap: wrap;
 }
 
@@ -185,7 +238,7 @@ ul {
   font-weight: var(--w-medio);
   letter-spacing: var(--track-micro);
   text-transform: uppercase;
-  color: var(--rojo-vivo);
+  color: var(--rojo-cifra);
 }
 
 .header-list li a {
@@ -214,7 +267,7 @@ ul {
   font-size: var(--t-micro);
   letter-spacing: var(--track-label);
   text-transform: uppercase;
-  color: var(--humo);
+  color: var(--texto);
 }
 
 /* ---------------------------------------------------- 4. Layout de sección */
@@ -222,10 +275,10 @@ ul {
 .gastos-list-block {
   max-width: var(--maxw);
   margin-inline: auto;
-  padding: var(--e-7) var(--e-5) var(--e-8);
+  padding: var(--pad-y) var(--pad-x) var(--e-8);
   display: flex;
   flex-direction: column;
-  gap: var(--e-7); /* entre secciones > entre ítems */
+  gap: var(--gap-seccion); /* entre secciones > entre ítems */
 }
 
 .label-gastos-list p {
@@ -241,13 +294,14 @@ ul {
   gap: var(--e-4);
 }
 
-/* marca vertical fina: el único ornamento del título */
+/* marca vertical fina: el único ornamento del título.
+   --rojo en vez de --rojo-vivo: es decorativo, no tiene que gritar */
 .label-gastos-list p::before {
   content: "";
   width: var(--filete-gordo);
   height: 0.85em;
   flex: none;
-  background: var(--rojo-vivo);
+  background: var(--rojo);
 }
 
 /* ------------------------------------------------- 5. Formulario */
@@ -256,7 +310,7 @@ ul {
   background: var(--superficie);
   border: var(--hairline) solid var(--filete);
   border-radius: var(--radio);
-  padding: var(--e-6);
+  padding: var(--pad-panel);
 }
 
 #gastos-form {
@@ -265,7 +319,7 @@ ul {
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
   /* dentro del grupo (label→control) más cerca que entre grupos */
-  gap: var(--e-5) var(--e-3);
+  gap: clamp(var(--e-4), 3vw, var(--e-5)) var(--e-3);
 }
 
 #gastos-form label {
@@ -275,14 +329,15 @@ ul {
   letter-spacing: var(--track-label);
   text-transform: uppercase;
   text-align: right;
-  color: var(--humo);
+  color: var(--texto); /* identifica el control: un escalón sobre --humo */
 }
 
 #gastos-form input,
 #gastos-form select {
   width: 100%;
+  min-width: 0; /* nunca empuja la grilla, por ancho que esté el contenido */
   min-height: var(--target);
-  background: var(--negro);
+  background: var(--fondo);
   color: var(--papel);
   border: var(--hairline) solid var(--filete-control);
   border-radius: var(--radio);
@@ -293,13 +348,13 @@ ul {
 }
 
 #gastos-form input::placeholder {
-  color: var(--humo); /* 7:1 — el placeholder es texto */
+  color: var(--humo); /* 6:1 — el placeholder es texto */
   opacity: 1;
 }
 
 #gastos-form input:hover,
 #gastos-form select:hover {
-  border-color: var(--humo);
+  border-color: var(--filete-hover);
 }
 
 #gastos-form input:focus,
@@ -337,7 +392,9 @@ ul {
   text-transform: uppercase;
   background: var(--rojo);
   color: var(--papel);
-  border: var(--hairline) solid var(--rojo);
+  /* --rojo contra el panel (2.5:1) no identifica el borde del componente;
+     el filete --rojo-vivo sí (4.2:1) */
+  border: var(--hairline) solid var(--rojo-vivo);
   border-radius: var(--radio);
   padding: var(--e-3) var(--e-6);
   cursor: pointer;
@@ -355,8 +412,9 @@ ul {
 
 #gastos-form button:active {
   background: var(--rojo-hondo);
-  border-color: var(--rojo-hondo);
   color: var(--papel);
+  /* el filete se mantiene --rojo-vivo: la presión oscurece el relleno,
+     no el identificador del borde contra el panel */
 }
 
 /* Estado de error (la clase .error la agrega el JS) */
@@ -367,8 +425,10 @@ ul {
   font-size: var(--t-label);
   line-height: var(--lh-cuerpo);
   color: var(--papel);
-  background: color-mix(in srgb, var(--rojo-vivo) 10%, var(--negro));
-  border: var(--hairline) solid color-mix(in srgb, var(--rojo-vivo) 45%, var(--negro));
+  background: color-mix(in srgb, var(--rojo-vivo) 8%, var(--superficie));
+  /* filete neutro (el rojo fino no llega a 3:1); la señal la marca
+     la barra izquierda, que sí contrasta */
+  border: var(--hairline) solid var(--filete-hover);
   border-left: var(--filete-gordo) solid var(--rojo-vivo);
   border-radius: var(--radio);
   padding: var(--e-3) var(--e-4);
@@ -389,7 +449,7 @@ ul {
 .gastos-list:empty::before {
   content: "Sin gastos registrados. Cargá el primero en el formulario de arriba.";
   display: block;
-  border: var(--hairline) dashed var(--filete);
+  border: var(--hairline) dashed var(--g-28);
   border-radius: var(--radio);
   padding: var(--e-6) var(--e-5);
   text-align: center;
@@ -421,8 +481,8 @@ ul {
 }
 
 .gastos-list > div:hover {
-  background: var(--superficie);
-  border-bottom-color: var(--filete-control);
+  background: var(--fondo-alto); /* no --superficie: a g-12 el rojo de la cifra cae de 4.5:1 */
+  border-bottom-color: var(--filete-hover);
 }
 
 /* orden en el DOM: p · p · span · span · span */
@@ -456,7 +516,7 @@ ul {
   font-weight: var(--w-fuerte);
   font-variant-numeric: tabular-nums;
   letter-spacing: var(--track-cifra);
-  color: var(--rojo-vivo);
+  color: var(--rojo-cifra); /* dato: rojo suavizado, sigue siendo el foco */
   white-space: nowrap;
 }
 
@@ -483,9 +543,12 @@ ul {
   white-space: nowrap;
 }
 
-/* ----------------------------------------------------------- 7. Responsive */
+/* ----------------------------------------------------------- 7. Responsive
+   El respiro ya es fluido (clamp), así que acá solo se cambia estructura.
+   Los breakpoints son los límites donde la grilla deja de caber. */
 
 @media (max-width: 720px) {
+  /* labels arriba del control: en 2 columnas el input queda diminuto */
   #gastos-form {
     grid-template-columns: minmax(0, 1fr);
     gap: var(--e-2);
@@ -493,7 +556,7 @@ ul {
 
   #gastos-form label {
     text-align: left;
-    margin-top: var(--e-2);
+    margin-top: var(--e-3);
   }
 
   #gastos-form label:first-child {
@@ -504,25 +567,12 @@ ul {
     grid-column: 1;
     justify-self: stretch;
     text-align: center;
-    margin-top: var(--e-3);
+    margin-top: var(--e-2);
   }
 }
 
 @media (max-width: 560px) {
-  .header-list {
-    padding: var(--e-4);
-    gap: var(--e-2) var(--e-5);
-  }
-
-  .gastos-list-block {
-    padding: var(--e-6) var(--e-4) var(--e-7);
-    gap: var(--e-6);
-  }
-
-  .gastos-form-block {
-    padding: var(--e-5) var(--e-4);
-  }
-
+  /* fila del extracto: monto y fecha ya no caben en la misma línea */
   .gastos-list > div {
     grid-template-columns: minmax(0, 1fr) auto;
     grid-template-areas:
@@ -530,10 +580,27 @@ ul {
       "cat   moneda"
       "fecha fecha";
     column-gap: var(--e-4);
+    padding-inline: var(--e-2);
   }
 
   .gastos-list > div > span:nth-child(5) {
     text-align: left;
+  }
+
+  .gastos-list:empty::before {
+    padding: var(--e-5) var(--e-4);
+  }
+}
+
+/* pantallas muy angostas: la marca no compite con el ancho útil */
+@media (max-width: 380px) {
+  .header-list {
+    gap: var(--e-2) var(--e-4);
+  }
+
+  .header-list li:last-child {
+    order: 3;
+    flex-basis: 100%; /* a la última línea, sin partirse a media palabra */
   }
 }
 
@@ -551,7 +618,7 @@ ul {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--negro);
+  background: var(--fondo);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -559,5 +626,5 @@ ul {
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--humo);
+  background: var(--g-75);
 }
