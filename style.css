@@ -1,7 +1,563 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@500;600;800;900&display=swap");
+
+/* ============================================================================
+   dollivera · finances — style.css
+   Dirección: minimalismo tecno. Negro, aire y filetes finos;
+               el rojo aparece solo donde comunica algo.
+   Fuentes:    Inter → títulos y subtítulos
+               IBM Plex Mono → cifras, CTA y body text
+   Paleta:     #000000 · #830000 · #BC0202 · #FF0000
+   Nota:       --papel (#f2f2f2) es el único color fuera de la paleta pedida:
+               es el texto primario sobre negro (17:1). Sin él, el único texto
+               que cumple AA sobre #000 es #FF0000 y todo se aplana a un tono.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------- 1. Tokens */
+
+:root {
+  /* --- marca --- */
+  --negro: #000000;
+  --rojo-hondo: #830000; /* tintes muy sutiles */
+  --rojo: #bc0202; /* acento primario: CTA, cifras */
+  --rojo-vivo: #ff0000; /* interactivo: foco, hover, alertas */
+
+  /* --- neutros derivados (sin hex nuevos sueltos) --- */
+  --papel: #f2f2f2; /* texto primario */
+  --tinta: var(--negro); /* texto sobre rojo */
+  --humo: color-mix(in srgb, var(--papel) 62%, var(--negro)); /* texto tenue ≈ 7:1 */
+  --superficie: color-mix(in srgb, var(--papel) 6%, var(--negro)); /* paneles */
+  --filete: color-mix(in srgb, var(--papel) 16%, var(--negro)); /* divisores decorativos */
+  --filete-control: color-mix(in srgb, var(--papel) 42%, var(--negro)); /* bordes de control ≈ 3.8:1 */
+
+  /* --- tipografía --- */
+  --font-titulo: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  --t-marca: clamp(1.75rem, 4.5vw, 2.5rem);
+  --t-display: clamp(2rem, 5vw, 3rem);
+  --t-monto: clamp(1.125rem, 2.5vw, 1.375rem);
+  --t-sub: clamp(1rem, 1.6vw, 1.125rem);
+  --t-cuerpo: 0.9375rem;
+  --t-cta: 0.875rem;
+  --t-label: 0.75rem;
+  --t-micro: 0.6875rem;
+
+  --w-titulo: 900;
+  --w-display: 800;
+  --w-sub: 600;
+  --w-fuerte: 600;
+  --w-medio: 500;
+  --w-cuerpo: 400;
+
+  --lh-titulo: 1;
+  --lh-cuerpo: 1.6;
+
+  --track-titulo: -0.03em;
+  --track-label: 0.12em;
+  --track-micro: 0.16em;
+  --track-cifra: 0.02em;
+
+  /* --- espacio (escala 4-8-12-16-24-32-48-64) --- */
+  --e-1: 4px;
+  --e-2: 8px;
+  --e-3: 12px;
+  --e-4: 16px;
+  --e-5: 24px;
+  --e-6: 32px;
+  --e-7: 48px;
+  --e-8: 64px;
+
+  /* --- estructura --- */
+  --radio: 4px;
+  --hairline: 1px;
+  --foco: 2px;
+  --filete-gordo: 2px;
+  --maxw: 920px;
+  --target: 44px; /* target táctil mínimo */
+
+  /* --- profundidad: sin sombras, solo capas de gris --- */
+
+  /* --- movimiento --- */
+  --dur: 150ms;
+  --ease: ease-out;
+
+  /* --- capas --- */
+  --z-alto: 10;
+
+  color-scheme: dark;
+}
+
+/* ------------------------------------------------------------ 2. Base/reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--negro); /* evita el flash blanco al hacer overscroll */
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh; /* alturas dinámicas en móvil */
+  background: var(--negro);
+  color: var(--papel);
+  font-family: var(--font-mono);
+  font-size: var(--t-cuerpo);
+  font-weight: var(--w-cuerpo);
+  line-height: var(--lh-cuerpo);
+  scrollbar-color: var(--filete-control) var(--negro);
+}
+
+img,
+input,
+select,
+button {
+  font: inherit;
+  color: inherit;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+::selection {
+  background: var(--rojo);
+  color: var(--papel); /* 6.1:1 — negro sobre rojo daría 3.1:1 */
+}
+
+:focus-visible {
+  outline: var(--foco) solid var(--rojo-vivo);
+  outline-offset: var(--e-1);
+}
+
+/* --------------------------------------------------------------- 3. Header */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-alto);
+  background: var(--negro);
+  border-bottom: var(--hairline) solid var(--filete);
+}
+
+.header-list {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: var(--e-5);
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--e-3) var(--e-6);
+  flex-wrap: wrap;
+}
+
+.header-list li:first-child {
+  display: flex;
+  align-items: baseline;
+  gap: var(--e-3);
+  margin-right: auto;
+}
+
+.header-list li:first-child p {
+  font-family: var(--font-titulo);
+  font-size: var(--t-marca);
+  font-weight: var(--w-titulo);
+  line-height: var(--lh-titulo);
+  letter-spacing: var(--track-titulo);
+  text-transform: lowercase;
+  color: var(--papel);
+}
+
+.header-list li:first-child span {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-medio);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--rojo-vivo);
+}
+
+.header-list li a {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  font-weight: var(--w-medio);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--humo);
+  padding: var(--e-2) 0;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--e-1);
+  transition:
+    color var(--dur) var(--ease),
+    text-decoration-color var(--dur) var(--ease);
+}
+
+.header-list li a:hover {
+  color: var(--papel);
+  text-decoration-color: var(--rojo-vivo);
+}
+
+.header-list li:last-child {
+  font-size: var(--t-micro);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--humo);
+}
+
+/* ---------------------------------------------------- 4. Layout de sección */
+
+.gastos-list-block {
+  max-width: var(--maxw);
+  margin-inline: auto;
+  padding: var(--e-7) var(--e-5) var(--e-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--e-7); /* entre secciones > entre ítems */
+}
+
+.label-gastos-list p {
+  font-family: var(--font-titulo);
+  font-size: var(--t-display);
+  font-weight: var(--w-display);
+  line-height: var(--lh-titulo);
+  letter-spacing: var(--track-titulo);
+  color: var(--papel);
+  text-wrap: balance;
+  display: flex;
+  align-items: center;
+  gap: var(--e-4);
+}
+
+/* marca vertical fina: el único ornamento del título */
+.label-gastos-list p::before {
+  content: "";
+  width: var(--filete-gordo);
+  height: 0.85em;
+  flex: none;
+  background: var(--rojo-vivo);
+}
+
+/* ------------------------------------------------- 5. Formulario */
+
+.gastos-form-block {
+  background: var(--superficie);
+  border: var(--hairline) solid var(--filete);
+  border-radius: var(--radio);
+  padding: var(--e-6);
+}
+
+#gastos-form {
+  display: grid;
+  /* columna de labels medida por su contenido: no corta etiquetas largas */
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center;
+  /* dentro del grupo (label→control) más cerca que entre grupos */
+  gap: var(--e-5) var(--e-3);
+}
+
+#gastos-form label {
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-medio);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  text-align: right;
+  color: var(--humo);
+}
+
+#gastos-form input,
+#gastos-form select {
+  width: 100%;
+  min-height: var(--target);
+  background: var(--negro);
+  color: var(--papel);
+  border: var(--hairline) solid var(--filete-control);
+  border-radius: var(--radio);
+  padding: var(--e-3) var(--e-4);
+  font-family: var(--font-mono);
+  font-size: var(--t-cuerpo);
+  transition: border-color var(--dur) var(--ease);
+}
+
+#gastos-form input::placeholder {
+  color: var(--humo); /* 7:1 — el placeholder es texto */
+  opacity: 1;
+}
+
+#gastos-form input:hover,
+#gastos-form select:hover {
+  border-color: var(--humo);
+}
+
+#gastos-form input:focus,
+#gastos-form select:focus {
+  border-color: var(--rojo-vivo);
+  outline: var(--foco) solid var(--rojo-vivo); /* anillo sólido: un halo translúcido no llega a 3:1 */
+  outline-offset: var(--e-1);
+}
+
+#monto {
+  font-weight: var(--w-fuerte);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--track-cifra);
+}
+
+#gastos-form select {
+  /* sin appearance: none → conserva la flecha nativa (afordance visible) */
+  cursor: pointer;
+}
+
+#gastos-form input[type="date"] {
+  color-scheme: dark;
+  cursor: pointer;
+}
+
+/* CTA — IBM Plex Mono, mayúsculas, un solo bloque de color en la página */
+#gastos-form button {
+  grid-column: 2;
+  justify-self: start;
+  min-height: var(--target);
+  font-family: var(--font-mono);
+  font-size: var(--t-cta);
+  font-weight: var(--w-fuerte);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  background: var(--rojo);
+  color: var(--papel);
+  border: var(--hairline) solid var(--rojo);
+  border-radius: var(--radio);
+  padding: var(--e-3) var(--e-6);
+  cursor: pointer;
+  transition:
+    background var(--dur) var(--ease),
+    color var(--dur) var(--ease),
+    border-color var(--dur) var(--ease);
+}
+
+#gastos-form button:hover {
+  background: var(--rojo-vivo);
+  border-color: var(--rojo-vivo);
+  color: var(--tinta); /* 5.2:1 */
+}
+
+#gastos-form button:active {
+  background: var(--rojo-hondo);
+  border-color: var(--rojo-hondo);
+  color: var(--papel);
+}
+
+/* Estado de error (la clase .error la agrega el JS) */
 #mensaje-error {
-    display: none;
+  grid-column: 1 / -1;
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  line-height: var(--lh-cuerpo);
+  color: var(--papel);
+  background: color-mix(in srgb, var(--rojo-vivo) 10%, var(--negro));
+  border: var(--hairline) solid color-mix(in srgb, var(--rojo-vivo) 45%, var(--negro));
+  border-left: var(--filete-gordo) solid var(--rojo-vivo);
+  border-radius: var(--radio);
+  padding: var(--e-3) var(--e-4);
 }
 
 #mensaje-error.error {
-    display:  block;
+  display: block;
+}
+
+/* ------------------------------------------------------- 6. Lista de gastos */
+
+.gastos-list {
+  display: flex;
+  flex-direction: column;
+}
+
+/* estado vacío: qué falta + qué hacer */
+.gastos-list:empty::before {
+  content: "Sin gastos registrados. Cargá el primero en el formulario de arriba.";
+  display: block;
+  border: var(--hairline) dashed var(--filete);
+  border-radius: var(--radio);
+  padding: var(--e-6) var(--e-5);
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  letter-spacing: var(--track-label);
+  text-transform: uppercase;
+  color: var(--humo);
+}
+
+/* filas tipo extracto bancario: sin cajas, solo filetes */
+.gastos-list > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-areas:
+    "desc  monto  fecha"
+    "cat   moneda fecha";
+  align-items: center;
+  column-gap: var(--e-5);
+  row-gap: var(--e-2);
+  padding: var(--e-4) var(--e-3);
+  border-bottom: var(--hairline) solid var(--filete);
+  border-radius: var(--radio);
+  transition: background var(--dur) var(--ease);
+}
+
+.gastos-list > div:first-child {
+  border-top: var(--hairline) solid var(--filete);
+}
+
+.gastos-list > div:hover {
+  background: var(--superficie);
+  border-bottom-color: var(--filete-control);
+}
+
+/* orden en el DOM: p · p · span · span · span */
+.gastos-list > div > p:nth-child(1) {
+  grid-area: desc;
+  font-family: var(--font-titulo);
+  font-size: var(--t-sub);
+  font-weight: var(--w-sub);
+  letter-spacing: var(--track-titulo);
+  color: var(--papel);
+  overflow-wrap: anywhere;
+}
+
+.gastos-list > div > p:nth-child(2) {
+  grid-area: cat;
+  justify-self: start;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  font-weight: var(--w-medio);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--humo);
+  white-space: nowrap;
+}
+
+.gastos-list > div > span:nth-child(3) {
+  grid-area: monto;
+  justify-self: end;
+  font-family: var(--font-mono);
+  font-size: var(--t-monto);
+  font-weight: var(--w-fuerte);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--track-cifra);
+  color: var(--rojo-vivo);
+  white-space: nowrap;
+}
+
+.gastos-list > div > span:nth-child(4) {
+  grid-area: moneda;
+  justify-self: end;
+  font-family: var(--font-mono);
+  font-size: var(--t-micro);
+  letter-spacing: var(--track-micro);
+  text-transform: uppercase;
+  color: var(--humo);
+  white-space: nowrap;
+}
+
+.gastos-list > div > span:nth-child(5) {
+  grid-area: fecha;
+  align-self: center;
+  font-family: var(--font-mono);
+  font-size: var(--t-label);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: var(--track-label);
+  color: var(--humo);
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ----------------------------------------------------------- 7. Responsive */
+
+@media (max-width: 720px) {
+  #gastos-form {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--e-2);
+  }
+
+  #gastos-form label {
+    text-align: left;
+    margin-top: var(--e-2);
+  }
+
+  #gastos-form label:first-child {
+    margin-top: 0;
+  }
+
+  #gastos-form button {
+    grid-column: 1;
+    justify-self: stretch;
+    text-align: center;
+    margin-top: var(--e-3);
+  }
+}
+
+@media (max-width: 560px) {
+  .header-list {
+    padding: var(--e-4);
+    gap: var(--e-2) var(--e-5);
+  }
+
+  .gastos-list-block {
+    padding: var(--e-6) var(--e-4) var(--e-7);
+    gap: var(--e-6);
+  }
+
+  .gastos-form-block {
+    padding: var(--e-5) var(--e-4);
+  }
+
+  .gastos-list > div {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "desc  monto"
+      "cat   moneda"
+      "fecha fecha";
+    column-gap: var(--e-4);
+  }
+
+  .gastos-list > div > span:nth-child(5) {
+    text-align: left;
+  }
+}
+
+/* ------------------------------------------------------- 8. Motion / extras */
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+  }
+}
+
+::-webkit-scrollbar {
+  width: var(--e-2);
+  height: var(--e-2);
+}
+
+::-webkit-scrollbar-track {
+  background: var(--negro);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--filete-control);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--humo);
 }
