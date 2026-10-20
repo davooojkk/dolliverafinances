@@ -1,4 +1,4 @@
-import { monedasValidas, categoriasValidas } from "./formData";
+import { monedasValidas, categoriasValidas } from "./formData.js";
 
 // array que guarda los gastos en objetos y una función que devuelve la misma array
 
