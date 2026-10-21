@@ -1,6 +1,6 @@
 import { agregarGastos, obtenerGastos } from "./gastos.js";
 import { renderGastos } from "./render.js";
-
+import { validarGastos } from "./gastos.js";
 
 
 const formulario = document.querySelector('#gastos-form'); // seleccionamos el formulario del evento.
@@ -23,6 +23,7 @@ function submitFormulario(event) {
     const gastoAgregado = agregarGastos(nuevoGasto);
     if(gastoAgregado === true) {
         renderGastos(obtenerGastos());
+        mensajeError.classList.remove("error")
     } else {
         mensajeError.classList.add('error');
     };

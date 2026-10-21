@@ -1,630 +1,578 @@
-@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@500;600;800;900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@600;800;900&display=swap");
 
-/* ============================================================================
-   dollivera · finances — style.css
-   Dirección: minimalismo tecno. Grises suaves, aire y filetes finos;
-              el rojo aparece solo donde comunica algo.
-   Fuentes:    Inter → títulos y subtítulos
-               IBM Plex Mono → cifras, CTA y body text
-   Paleta:     #000000 · #830000 · #BC0202 · #FF0000 · #F2F2F2
-               + escala --g-06…--g-90 derivada (negro + % de papel)
-               + degradado leve de fondo: --fondo-alto → --fondo
-   Contraste:  texto ≥ 4.5:1 · bordes de control ≥ 3:1 (WCAG AA)
-   Nota:       Todo color, espacio y tipografía vive en tokens: ninguna
-               regla declara hex, px de layout ni fuentes sueltas.
-   ============================================================================ */
+/* dollivera · finances
+   Diseño oscuro, tipografía precisa y rojo como único acento.
+   Se conservan las clases e IDs que usa el HTML/JavaScript.
+*/
 
-/* ---------------------------------------------------------------- 1. Tokens */
-
+/* 1. Sistema -------------------------------------------------------------- */
 :root {
-  /* --- marca: núcleo intacto --- */
-  --negro: #000000;
-  --rojo-hondo: #830000; /* presión / active */
-  --rojo: #bc0202; /* acento primario: CTA */
-  --rojo-vivo: #ff0000; /* interactivo: foco, hover, alertas */
-  --papel: #f2f2f2; /* base neutra de la que se deriva toda la escala */
+  /* Paleta */
+  --negro: #000;
+  --blanco: #f2f2f2;
+  --rojo: #bc0202;
+  --rojo-oscuro: #830000;
+  --rojo-vivo: #f00;
+  --rojo-dato: color-mix(in srgb, var(--rojo-vivo) 88%, var(--blanco));
 
-  /* --- escala de grises expandida: negro + % de papel ---
-     10 peldaños en vez de 4, para poder bajar el contraste por capas
-     sin inventar hex sueltos. --g-06 es el lienzo y --g-09 el techo
-     del degradado: más arriba el rojo de las cifras baja de 4.5:1. */
-  --g-06: color-mix(in srgb, var(--papel) 6%, var(--negro));
-  --g-09: color-mix(in srgb, var(--papel) 9%, var(--negro));
-  --g-12: color-mix(in srgb, var(--papel) 12%, var(--negro));
-  --g-20: color-mix(in srgb, var(--papel) 20%, var(--negro));
-  --g-28: color-mix(in srgb, var(--papel) 28%, var(--negro));
-  --g-44: color-mix(in srgb, var(--papel) 44%, var(--negro));
-  --g-52: color-mix(in srgb, var(--papel) 52%, var(--negro));
-  --g-60: color-mix(in srgb, var(--papel) 60%, var(--negro));
-  --g-75: color-mix(in srgb, var(--papel) 75%, var(--negro));
-  --g-90: color-mix(in srgb, var(--papel) 90%, var(--negro));
+  --fondo: color-mix(in srgb, var(--blanco) 6%, var(--negro));
+  --fondo-alto: color-mix(in srgb, var(--blanco) 9%, var(--negro));
+  --panel: color-mix(in srgb, var(--blanco) 12%, var(--negro));
+  --borde: color-mix(in srgb, var(--blanco) 24%, var(--negro));
+  --borde-campo: color-mix(in srgb, var(--blanco) 46%, var(--negro));
+  --borde-hover: color-mix(in srgb, var(--blanco) 56%, var(--negro));
+  --texto: color-mix(in srgb, var(--blanco) 90%, var(--negro));
+  --texto-suave: color-mix(in srgb, var(--blanco) 65%, var(--negro));
+  --fondo-error: color-mix(in srgb, var(--rojo-vivo) 8%, var(--panel));
 
-  /* --- semánticos: capas de gris suaves sobre lienzo casi-negro ---
-     #000 puro da 21:1 contra el texto: duro a la vista y sin "aire".
-     Cotas WCAG respetadas: texto ≥ 4.5:1 · bordes de control ≥ 3:1.
-     El fondo es un degradado leve (top → base) anclado al viewport:
-     así el header sticky siempre coincide con el tono de su detrás. */
-  --fondo: var(--g-06); /* lienzo: base del degradado */
-  --fondo-alto: var(--g-09); /* arranque del degradado + hover de fila */
-  --superficie: var(--g-12); /* paneles */
-  --filete: var(--g-20); /* divisores decorativos */
-  --filete-control: var(--g-44); /* bordes de control ≈ 3.7:1 (WCAG 1.4.11) */
-  --filete-hover: var(--g-52); /* borde de control en hover ≈ 4.9:1 */
-  --humo: var(--g-60); /* texto tenue ≈ 6.1:1 */
-  --texto: var(--g-90); /* texto secundario ≈ 13.7:1 */
+  /* Letras */
+  --titulos: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --letra-xs: 0.6875rem;
+  --letra-sm: 0.75rem;
+  --letra-base: 0.9375rem;
+  --letra-boton: 0.875rem;
+  --letra-sub: clamp(1rem, 1.6vw, 1.125rem);
+  --letra-monto: clamp(1.125rem, 2.5vw, 1.375rem);
+  --letra-titulo: clamp(2rem, 5vw, 3rem);
+  --letra-marca: clamp(1.75rem, 4.5vw, 2.5rem);
 
-  /* extensión vertical del degradado de fondo */
-  --grad-fin: 60vh;
+  --peso-normal: 400;
+  --peso-medio: 500;
+  --peso-fuerte: 600;
+  --peso-titulo: 800;
+  --peso-marca: 900;
+  --linea: 1.6;
+  --linea-titulo: 1.1;
+  --letras-titulo: -0.03em;
+  --letras-label: 0.1em;
+  --letras-micro: 0.12em;
+  --letras-monto: 0.02em;
 
-  /* --- rojo dato: el rojo vivo en cifras largas pesa visualmente;
-     un 12% de papel lo suaviza sin salirse de la paleta (≈4.7:1) --- */
-  --rojo-cifra: color-mix(in srgb, var(--rojo-vivo) 88%, var(--papel));
-  --tinta: var(--negro); /* texto sobre rojo */
+  /* Espacios: múltiplos de 4, sin valores sueltos en componentes */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+  --esp-8: 4rem;
+  --aire-x: clamp(var(--esp-4), 4vw, var(--esp-6));
+  --aire-y: clamp(var(--esp-6), 6vw, var(--esp-7));
+  --aire-panel: clamp(var(--esp-4), 3vw, var(--esp-6));
+  --separacion: clamp(var(--esp-6), 5vw, var(--esp-7));
 
-  /* --- tipografía --- */
-  --font-titulo: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-
-  --t-marca: clamp(1.75rem, 4.5vw, 2.5rem);
-  --t-display: clamp(2rem, 5vw, 3rem);
-  --t-monto: clamp(1.125rem, 2.5vw, 1.375rem);
-  --t-sub: clamp(1rem, 1.6vw, 1.125rem);
-  --t-cuerpo: 0.9375rem;
-  --t-cta: 0.875rem;
-  --t-label: 0.75rem;
-  --t-micro: 0.6875rem;
-
-  --w-titulo: 900;
-  --w-display: 800;
-  --w-sub: 600;
-  --w-fuerte: 600;
-  --w-medio: 500;
-  --w-cuerpo: 400;
-
-  --lh-titulo: 1;
-  --lh-cuerpo: 1.6;
-
-  --track-titulo: -0.03em;
-  --track-label: 0.12em;
-  --track-micro: 0.16em;
-  --track-cifra: 0.02em;
-
-  /* --- espacio (escala 4-8-12-16-24-32-48-64 + respiro fluido) --- */
-  --e-1: 4px;
-  --e-2: 8px;
-  --e-3: 12px;
-  --e-4: 16px;
-  --e-5: 24px;
-  --e-6: 32px;
-  --e-7: 48px;
-  --e-8: 64px;
-
-  /* padding que se contrae con el viewport: sin escalones bruscos
-     entre breakpoints, el aire se gana solo donde hay ancho */
-  --pad-x: clamp(var(--e-4), 5vw, var(--e-6));
-  --pad-y: clamp(var(--e-5), 6vw, var(--e-7));
-  --pad-panel: clamp(var(--e-4), 3vw + var(--e-2), var(--e-6));
-  --gap-seccion: clamp(var(--e-6), 5vw, var(--e-7));
-
-  /* --- estructura --- */
-  --radio: 4px;
-  --hairline: 1px;
+  /* Medidas y controles */
+  --ancho: 57.5rem;
+  --alto-campo: 2.75rem;
+  --radio: 0.375rem;
+  --linea-fina: 1px;
+  --linea-gruesa: 2px;
   --foco: 2px;
-  --filete-gordo: 2px;
-  --maxw: 920px;
-  --target: 44px; /* target táctil mínimo */
+  --alto-marca: 0.85em;
+  --fondo-gradiente: 60vh;
+  --capa-header: 10;
+  --opacidad-inactiva: 0.55;
 
-  /* --- profundidad: sin sombras, solo capas de gris --- */
+  /* Flecha propia: medida desde el borde derecho, no del navegador */
+  --flecha-borde: var(--esp-4);
+  --flecha-lado: 0.375rem;
+  --flecha-aire: var(--esp-3);
 
-  /* --- movimiento --- */
-  --dur: 150ms;
-  --ease: ease-out;
-
-  /* --- capas --- */
-  --z-alto: 10;
+  /* Interacciones */
+  --rapido: 150ms;
+  --suave: 220ms;
+  --curva: cubic-bezier(0.2, 0.75, 0.2, 1);
+  --desplazamiento: 0.375rem;
+  --presion: 0.125rem;
+  --mensaje-vacio: "Sin gastos registrados. Cargá el primero en el formulario de arriba.";
 
   color-scheme: dark;
 }
 
-/* ------------------------------------------------------------ 2. Base/reset */
-
+/* 2. Base ----------------------------------------------------------------- */
 *,
 *::before,
 *::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
+  background: var(--fondo);
   -webkit-text-size-adjust: 100%;
-  background-color: var(--fondo); /* evita el flash blanco al hacer overscroll */
 }
 
 body {
+  min-width: 0;
   min-height: 100vh;
-  min-height: 100dvh; /* alturas dinámicas en móvil */
-  /* sin background: taparía la capa negativa del degradado de abajo */
-  color: var(--papel);
-  font-family: var(--font-mono);
-  font-size: var(--t-cuerpo);
-  font-weight: var(--w-cuerpo);
-  line-height: var(--lh-cuerpo);
-  scrollbar-color: var(--filete-control) var(--fondo);
+  min-height: 100dvh;
+  margin: 0;
+  color: var(--blanco);
+  background: linear-gradient(
+    to bottom,
+    var(--fondo-alto),
+    var(--fondo) var(--fondo-gradiente)
+  ) fixed;
+  font: var(--peso-normal) var(--letra-base) / var(--linea) var(--mono);
+  scrollbar-color: var(--borde-campo) var(--fondo);
 }
 
-/* degradado leve de fondo: gris claro arriba → base abajo.
-   position: fixed → anclado al viewport, no al documento: el header
-   sticky (tono --fondo-alto) siempre calza con lo que tiene detrás.
-   z-index negativo → queda bajo todo el contenido pero sobre el
-   background del canvas (html). */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background: linear-gradient(180deg, var(--fondo-alto) 0%, var(--fondo) var(--grad-fin));
-  pointer-events: none;
-}
+:where(h1, h2, h3, p, ul) { margin: 0; }
+:where(ul) { padding: 0; list-style: none; }
+:where(img, svg) { max-width: 100%; }
+:where(input, select, button) { font: inherit; color: inherit; }
+a { color: inherit; text-decoration: none; }
 
-img,
-input,
-select,
-button {
-  font: inherit;
-  color: inherit;
-}
-
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-ul {
-  list-style: none;
-}
-
-::selection {
-  background: var(--rojo);
-  color: var(--papel); /* 6.1:1 — negro sobre rojo daría 3.1:1 */
-}
+::selection { background: var(--rojo); color: var(--blanco); }
 
 :focus-visible {
   outline: var(--foco) solid var(--rojo-vivo);
-  outline-offset: var(--e-1);
+  outline-offset: var(--esp-1);
 }
 
-/* --------------------------------------------------------------- 3. Header */
-
+/* 3. Cabecera ------------------------------------------------------------- */
 .header {
   position: sticky;
   top: 0;
-  z-index: var(--z-alto);
-  background: var(--fondo-alto); /* igual al arranque del degradado: sin costura */
-  border-bottom: var(--hairline) solid var(--filete);
+  z-index: var(--capa-header);
+  background: var(--fondo-alto);
+  border-bottom: var(--linea-fina) solid var(--borde);
 }
 
 .header-list {
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding: clamp(var(--e-3), 2vw, var(--e-5)) var(--pad-x);
   display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: var(--e-2) var(--e-5);
   flex-wrap: wrap;
+  align-items: center;
+  gap: var(--esp-2) var(--esp-5);
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--esp-3) var(--aire-x);
 }
 
 .header-list li:first-child {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: var(--e-3);
-  margin-right: auto;
+  gap: var(--esp-2) var(--esp-3);
+  min-width: 0;
+  margin-inline-end: auto;
 }
 
 .header-list li:first-child p {
-  font-family: var(--font-titulo);
-  font-size: var(--t-marca);
-  font-weight: var(--w-titulo);
-  line-height: var(--lh-titulo);
-  letter-spacing: var(--track-titulo);
+  color: var(--blanco);
+  font: var(--peso-marca) var(--letra-marca) / var(--linea-titulo) var(--titulos);
+  letter-spacing: var(--letras-titulo);
   text-transform: lowercase;
-  color: var(--papel);
 }
 
 .header-list li:first-child span {
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  font-weight: var(--w-medio);
-  letter-spacing: var(--track-micro);
+  color: var(--rojo-dato);
+  font-size: var(--letra-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-micro);
   text-transform: uppercase;
-  color: var(--rojo-cifra);
 }
 
 .header-list li a {
-  display: inline-block;
-  font-family: var(--font-mono);
-  font-size: var(--t-label);
-  font-weight: var(--w-medio);
-  letter-spacing: var(--track-label);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--alto-campo);
+  color: var(--texto-suave);
+  font-size: var(--letra-sm);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-label);
   text-transform: uppercase;
-  color: var(--humo);
-  padding: var(--e-2) 0;
   text-decoration: underline;
   text-decoration-color: transparent;
-  text-underline-offset: var(--e-1);
+  text-underline-offset: var(--esp-1);
   transition:
-    color var(--dur) var(--ease),
-    text-decoration-color var(--dur) var(--ease);
-}
-
-.header-list li a:hover {
-  color: var(--papel);
-  text-decoration-color: var(--rojo-vivo);
+    color var(--rapido) var(--curva),
+    text-decoration-color var(--rapido) var(--curva);
 }
 
 .header-list li:last-child {
-  font-size: var(--t-micro);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
   color: var(--texto);
+  font-size: var(--letra-xs);
+  letter-spacing: var(--letras-label);
+  text-transform: uppercase;
 }
 
-/* ---------------------------------------------------- 4. Layout de sección */
-
+/* 4. Contenido ------------------------------------------------------------ */
 .gastos-list-block {
-  max-width: var(--maxw);
-  margin-inline: auto;
-  padding: var(--pad-y) var(--pad-x) var(--e-8);
   display: flex;
   flex-direction: column;
-  gap: var(--gap-seccion); /* entre secciones > entre ítems */
+  gap: var(--separacion);
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--aire-y) var(--aire-x) var(--esp-8);
 }
 
 .label-gastos-list p {
-  font-family: var(--font-titulo);
-  font-size: var(--t-display);
-  font-weight: var(--w-display);
-  line-height: var(--lh-titulo);
-  letter-spacing: var(--track-titulo);
-  color: var(--papel);
-  text-wrap: balance;
   display: flex;
   align-items: center;
-  gap: var(--e-4);
+  gap: var(--esp-4);
+  color: var(--blanco);
+  font: var(--peso-titulo) var(--letra-titulo) / var(--linea-titulo) var(--titulos);
+  letter-spacing: var(--letras-titulo);
+  text-wrap: balance;
 }
 
-/* marca vertical fina: el único ornamento del título.
-   --rojo en vez de --rojo-vivo: es decorativo, no tiene que gritar */
 .label-gastos-list p::before {
   content: "";
-  width: var(--filete-gordo);
-  height: 0.85em;
   flex: none;
+  width: var(--linea-gruesa);
+  height: var(--alto-marca);
   background: var(--rojo);
 }
 
-/* ------------------------------------------------- 5. Formulario */
-
+/* 5. Formulario ----------------------------------------------------------- */
 .gastos-form-block {
-  background: var(--superficie);
-  border: var(--hairline) solid var(--filete);
+  padding: var(--aire-panel);
+  background: var(--panel);
+  border: var(--linea-fina) solid var(--borde);
   border-radius: var(--radio);
-  padding: var(--pad-panel);
 }
 
 #gastos-form {
   display: grid;
-  /* columna de labels medida por su contenido: no corta etiquetas largas */
   grid-template-columns: max-content minmax(0, 1fr);
   align-items: center;
-  /* dentro del grupo (label→control) más cerca que entre grupos */
-  gap: clamp(var(--e-4), 3vw, var(--e-5)) var(--e-3);
+  gap: var(--esp-4);
 }
 
 #gastos-form label {
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  font-weight: var(--w-medio);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  color: var(--texto);
+  font-size: var(--letra-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-label);
+  line-height: var(--linea);
   text-align: right;
-  color: var(--texto); /* identifica el control: un escalón sobre --humo */
+  text-transform: uppercase;
 }
 
-#gastos-form input,
-#gastos-form select {
+#gastos-form :is(input, select) {
   width: 100%;
-  min-width: 0; /* nunca empuja la grilla, por ancho que esté el contenido */
-  min-height: var(--target);
-  background: var(--fondo);
-  color: var(--papel);
-  border: var(--hairline) solid var(--filete-control);
+  min-width: 0;
+  min-height: var(--alto-campo);
+  padding: var(--esp-2) var(--esp-4);
+  background-color: var(--fondo);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde-campo);
   border-radius: var(--radio);
-  padding: var(--e-3) var(--e-4);
-  font-family: var(--font-mono);
-  font-size: var(--t-cuerpo);
-  transition: border-color var(--dur) var(--ease);
+  font-size: var(--letra-base);
+  transition:
+    background-color var(--rapido) var(--curva),
+    border-color var(--rapido) var(--curva);
 }
 
 #gastos-form input::placeholder {
-  color: var(--humo); /* 6:1 — el placeholder es texto */
+  color: var(--texto-suave);
   opacity: 1;
 }
 
-#gastos-form input:hover,
-#gastos-form select:hover {
-  border-color: var(--filete-hover);
+#gastos-form :is(input, select):focus {
+  background-color: var(--fondo-alto);
+  border-color: var(--rojo-vivo);
 }
 
-#gastos-form input:focus,
-#gastos-form select:focus {
+#gastos-form :is(input, select):is([aria-invalid="true"], :user-invalid) {
   border-color: var(--rojo-vivo);
-  outline: var(--foco) solid var(--rojo-vivo); /* anillo sólido: un halo translúcido no llega a 3:1 */
-  outline-offset: var(--e-1);
 }
 
 #monto {
-  font-weight: var(--w-fuerte);
+  font-weight: var(--peso-fuerte);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--track-cifra);
+  letter-spacing: var(--letras-monto);
 }
 
-#gastos-form select {
-  /* sin appearance: none → conserva la flecha nativa (afordance visible) */
-  cursor: pointer;
-}
-
+#gastos-form select,
 #gastos-form input[type="date"] {
-  color-scheme: dark;
   cursor: pointer;
 }
 
-/* CTA — IBM Plex Mono, mayúsculas, un solo bloque de color en la página */
+/* 'appearance: none' elimina la flecha nativa, que ignora padding-right.
+   Dos gradientes dibujan un chevrón del color del sistema. La separación
+   respecto al borde es exactamente --flecha-borde. No necesita SVG ni HTML. */
+#gastos-form select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: calc(
+    var(--flecha-borde) + 2 * var(--flecha-lado) + var(--flecha-aire)
+  );
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--texto) 50%),
+    linear-gradient(135deg, var(--texto) 50%, transparent 50%);
+  background-repeat: no-repeat;
+  background-size:
+    var(--flecha-lado) var(--flecha-lado),
+    var(--flecha-lado) var(--flecha-lado);
+  background-position:
+    right calc(var(--flecha-borde) + var(--flecha-lado)) center,
+    right var(--flecha-borde) center;
+}
+
+#gastos-form select option {
+  background: var(--panel);
+  color: var(--blanco);
+}
+
 #gastos-form button {
   grid-column: 2;
   justify-self: start;
-  min-height: var(--target);
-  font-family: var(--font-mono);
-  font-size: var(--t-cta);
-  font-weight: var(--w-fuerte);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
+  min-height: var(--alto-campo);
+  padding: var(--esp-3) var(--esp-6);
   background: var(--rojo);
-  color: var(--papel);
-  /* --rojo contra el panel (2.5:1) no identifica el borde del componente;
-     el filete --rojo-vivo sí (4.2:1) */
-  border: var(--hairline) solid var(--rojo-vivo);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--rojo-vivo);
   border-radius: var(--radio);
-  padding: var(--e-3) var(--e-6);
+  font-size: var(--letra-boton);
+  font-weight: var(--peso-fuerte);
+  letter-spacing: var(--letras-label);
+  text-transform: uppercase;
   cursor: pointer;
   transition:
-    background var(--dur) var(--ease),
-    color var(--dur) var(--ease),
-    border-color var(--dur) var(--ease);
+    background-color var(--rapido) var(--curva),
+    color var(--rapido) var(--curva),
+    transform var(--rapido) var(--curva);
 }
 
-#gastos-form button:hover {
-  background: var(--rojo-vivo);
-  border-color: var(--rojo-vivo);
-  color: var(--tinta); /* 5.2:1 */
+#gastos-form button:active:not(:disabled) {
+  background: var(--rojo-oscuro);
+  transform: translateY(var(--presion));
 }
 
-#gastos-form button:active {
-  background: var(--rojo-hondo);
-  color: var(--papel);
-  /* el filete se mantiene --rojo-vivo: la presión oscurece el relleno,
-     no el identificador del borde contra el panel */
+#gastos-form :is(input, select, button):disabled {
+  opacity: var(--opacidad-inactiva);
+  cursor: not-allowed;
 }
 
-/* Estado de error (la clase .error la agrega el JS) */
+/* El JS controla la clase .error. */
 #mensaje-error {
-  grid-column: 1 / -1;
   display: none;
-  font-family: var(--font-mono);
-  font-size: var(--t-label);
-  line-height: var(--lh-cuerpo);
-  color: var(--papel);
-  background: color-mix(in srgb, var(--rojo-vivo) 8%, var(--superficie));
-  /* filete neutro (el rojo fino no llega a 3:1); la señal la marca
-     la barra izquierda, que sí contrasta */
-  border: var(--hairline) solid var(--filete-hover);
-  border-left: var(--filete-gordo) solid var(--rojo-vivo);
+  grid-column: 1 / -1;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--fondo-error);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde-campo);
+  border-left: var(--linea-gruesa) solid var(--rojo-vivo);
   border-radius: var(--radio);
-  padding: var(--e-3) var(--e-4);
+  font-size: var(--letra-sm);
+  line-height: var(--linea);
 }
 
 #mensaje-error.error {
   display: block;
+  animation: aparecer var(--suave) var(--curva) both;
 }
 
-/* ------------------------------------------------------- 6. Lista de gastos */
-
+/* 6. Lista de gastos ------------------------------------------------------ */
 .gastos-list {
   display: flex;
   flex-direction: column;
+  min-width: 0;
 }
 
-/* estado vacío: qué falta + qué hacer */
-.gastos-list:empty::before {
-  content: "Sin gastos registrados. Cargá el primero en el formulario de arriba.";
+/* Fallback visual, no reemplaza un mensaje semántico en el HTML. */
+.gastos-list:not(:has(> *))::before {
+  content: var(--mensaje-vacio);
   display: block;
-  border: var(--hairline) dashed var(--g-28);
+  padding: var(--esp-6) var(--esp-5);
+  color: var(--texto-suave);
+  border: var(--linea-fina) dashed var(--borde-campo);
   border-radius: var(--radio);
-  padding: var(--e-6) var(--e-5);
+  font-size: var(--letra-sm);
   text-align: center;
-  font-family: var(--font-mono);
-  font-size: var(--t-label);
-  letter-spacing: var(--track-label);
-  text-transform: uppercase;
-  color: var(--humo);
 }
 
-/* filas tipo extracto bancario: sin cajas, solo filetes */
+/* Estructura DOM: descripción, categoría, monto, moneda, fecha. */
 .gastos-list > div {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) auto auto;
+  grid-template-columns: minmax(0, 1fr) max-content max-content;
   grid-template-areas:
-    "desc  monto  fecha"
-    "cat   moneda fecha";
+    "desc monto fecha"
+    "cat moneda fecha";
   align-items: center;
-  column-gap: var(--e-5);
-  row-gap: var(--e-2);
-  padding: var(--e-4) var(--e-3);
-  border-bottom: var(--hairline) solid var(--filete);
+  gap: var(--esp-2) var(--esp-5);
+  min-width: 0;
+  padding: var(--esp-4) var(--esp-3);
+  border-bottom: var(--linea-fina) solid var(--borde);
   border-radius: var(--radio);
-  transition: background var(--dur) var(--ease);
+  transition:
+    background-color var(--suave) var(--curva),
+    border-color var(--suave) var(--curva);
+  animation: aparecer var(--suave) var(--curva) both;
 }
 
 .gastos-list > div:first-child {
-  border-top: var(--hairline) solid var(--filete);
+  border-top: var(--linea-fina) solid var(--borde);
 }
 
-.gastos-list > div:hover {
-  background: var(--fondo-alto); /* no --superficie: a g-12 el rojo de la cifra cae de 4.5:1 */
-  border-bottom-color: var(--filete-hover);
-}
-
-/* orden en el DOM: p · p · span · span · span */
 .gastos-list > div > p:nth-child(1) {
   grid-area: desc;
-  font-family: var(--font-titulo);
-  font-size: var(--t-sub);
-  font-weight: var(--w-sub);
-  letter-spacing: var(--track-titulo);
-  color: var(--papel);
+  min-width: 0;
+  color: var(--blanco);
+  font: var(--peso-fuerte) var(--letra-sub) / var(--linea-titulo) var(--titulos);
+  letter-spacing: var(--letras-titulo);
   overflow-wrap: anywhere;
 }
 
 .gastos-list > div > p:nth-child(2) {
   grid-area: cat;
   justify-self: start;
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  font-weight: var(--w-medio);
-  letter-spacing: var(--track-micro);
+  min-width: 0;
+  color: var(--texto-suave);
+  font-size: var(--letra-xs);
+  font-weight: var(--peso-medio);
+  letter-spacing: var(--letras-micro);
   text-transform: uppercase;
-  color: var(--humo);
-  white-space: nowrap;
+  overflow-wrap: anywhere;
 }
 
 .gastos-list > div > span:nth-child(3) {
   grid-area: monto;
   justify-self: end;
-  font-family: var(--font-mono);
-  font-size: var(--t-monto);
-  font-weight: var(--w-fuerte);
+  min-width: 0;
+  color: var(--rojo-dato);
+  font-size: var(--letra-monto);
+  font-weight: var(--peso-fuerte);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--track-cifra);
-  color: var(--rojo-cifra); /* dato: rojo suavizado, sigue siendo el foco */
+  letter-spacing: var(--letras-monto);
   white-space: nowrap;
 }
 
 .gastos-list > div > span:nth-child(4) {
   grid-area: moneda;
   justify-self: end;
-  font-family: var(--font-mono);
-  font-size: var(--t-micro);
-  letter-spacing: var(--track-micro);
+  color: var(--texto-suave);
+  font-size: var(--letra-xs);
+  letter-spacing: var(--letras-micro);
   text-transform: uppercase;
-  color: var(--humo);
   white-space: nowrap;
 }
 
 .gastos-list > div > span:nth-child(5) {
   grid-area: fecha;
-  align-self: center;
-  font-family: var(--font-mono);
-  font-size: var(--t-label);
+  justify-self: end;
+  color: var(--texto-suave);
+  font-size: var(--letra-sm);
   font-variant-numeric: tabular-nums;
-  letter-spacing: var(--track-label);
-  color: var(--humo);
+  letter-spacing: var(--letras-label);
   text-align: right;
   white-space: nowrap;
 }
 
-/* ----------------------------------------------------------- 7. Responsive
-   El respiro ya es fluido (clamp), así que acá solo se cambia estructura.
-   Los breakpoints son los límites donde la grilla deja de caber. */
+/* Hover solo cuando hay puntero real. */
+@media (hover: hover) {
+  .header-list li a:hover {
+    color: var(--blanco);
+    text-decoration-color: var(--rojo-vivo);
+  }
 
-@media (max-width: 720px) {
-  /* labels arriba del control: en 2 columnas el input queda diminuto */
+  #gastos-form :is(input, select):not(:disabled, :focus, :user-invalid, [aria-invalid="true"]):hover {
+    border-color: var(--borde-hover);
+  }
+
+  #gastos-form button:not(:disabled, :active):hover {
+    background: var(--rojo-vivo);
+    color: var(--negro);
+  }
+
+  .gastos-list > div:hover {
+    background: var(--fondo-alto);
+    border-bottom-color: var(--borde-hover);
+  }
+}
+
+/* 7. Responsive ----------------------------------------------------------- */
+/* Los límites de @media deben ser literales; var() no funciona ahí. */
+@media (max-width: 45rem) {
   #gastos-form {
     grid-template-columns: minmax(0, 1fr);
-    gap: var(--e-2);
+    row-gap: var(--esp-2);
   }
 
   #gastos-form label {
     text-align: left;
-    margin-top: var(--e-3);
+    margin-block-start: var(--esp-3);
   }
 
-  #gastos-form label:first-child {
-    margin-top: 0;
-  }
+  #gastos-form label:first-child { margin-block-start: 0; }
 
   #gastos-form button {
     grid-column: 1;
     justify-self: stretch;
-    text-align: center;
-    margin-top: var(--e-2);
+    margin-block-start: var(--esp-2);
   }
 }
 
-@media (max-width: 560px) {
-  /* fila del extracto: monto y fecha ya no caben en la misma línea */
+@media (max-width: 35rem) {
+  /* Mantener marca, navegación y fecha alineadas en una sola fila. */
+  .header-list { column-gap: var(--esp-2); }
+
+  .header-list li:first-child {
+    flex-direction: column;
+    align-items: flex-start;
+    row-gap: var(--esp-1);
+  }
+
   .gastos-list > div {
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr) max-content;
     grid-template-areas:
-      "desc  monto"
-      "cat   moneda"
+      "desc monto"
+      "cat moneda"
       "fecha fecha";
-    column-gap: var(--e-4);
-    padding-inline: var(--e-2);
+    column-gap: var(--esp-3);
+    padding-inline: var(--esp-2);
   }
 
   .gastos-list > div > span:nth-child(5) {
+    justify-self: start;
     text-align: left;
   }
 
-  .gastos-list:empty::before {
-    padding: var(--e-5) var(--e-4);
+  .gastos-list:not(:has(> *))::before {
+    padding: var(--esp-5) var(--esp-4);
   }
 }
 
-/* pantallas muy angostas: la marca no compite con el ancho útil */
-@media (max-width: 380px) {
-  .header-list {
-    gap: var(--e-2) var(--e-4);
+@media (max-width: 30rem) {
+  .gastos-list > div {
+    grid-template-areas:
+      "desc desc"
+      "cat fecha"
+      "monto moneda";
   }
 
-  .header-list li:last-child {
-    order: 3;
-    flex-basis: 100%; /* a la última línea, sin partirse a media palabra */
+  .gastos-list > div > span:nth-child(3) {
+    justify-self: start;
+    overflow-wrap: anywhere;
+    white-space: normal;
+  }
+
+  .gastos-list > div > span:nth-child(5) {
+    justify-self: end;
+    text-align: right;
   }
 }
 
-/* ------------------------------------------------------- 8. Motion / extras */
+/* 8. Movimiento y detalles ------------------------------------------------ */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(var(--desplazamiento)); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *, *::before, *::after {
+    animation: none !important;
     transition: none !important;
+    scroll-behavior: auto !important;
   }
+
+  #gastos-form button:active:not(:disabled) { transform: none; }
 }
 
-::-webkit-scrollbar {
-  width: var(--e-2);
-  height: var(--e-2);
-}
-
-::-webkit-scrollbar-track {
-  background: var(--fondo);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--filete-control);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--g-75);
-}
+::-webkit-scrollbar { width: var(--esp-2); height: var(--esp-2); }
+::-webkit-scrollbar-track { background: var(--fondo); }
+::-webkit-scrollbar-thumb { background: var(--borde-campo); border-radius: var(--radio); }
+::-webkit-scrollbar-thumb:hover { background: var(--borde-hover); }

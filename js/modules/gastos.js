@@ -1,8 +1,9 @@
 import { monedasValidas, categoriasValidas } from "./formData.js";
+import { guardarGastos, importarGastos } from "./storage.js";
 
 // array que guarda los gastos en objetos y una función que devuelve la misma array
 
-let gastos = [];
+let gastos = importarGastos(); // los gastos se importan desde local storage
 
 export function obtenerGastos() {
   return gastos;
@@ -33,15 +34,15 @@ export function validarGastos(nuevoGasto) { // para validar el gasto y no sobrec
 export function agregarGastos(nuevoGasto) {
   if(!(validarGastos(nuevoGasto))) {
     return false;
-  } else {
-   let randomNumber = Math.floor(1 + (Math.random() * 10000));
+  } 
+  let randomNumber = Math.floor(1 + (Math.random() * 10000));
   while  ((gastos.some(gasto => gasto.id === randomNumber))) {
       randomNumber = Math.floor(1 + ( Math.random()  * 10000));
-  }
+  };
   const addGasto = {...nuevoGasto, id: randomNumber,}
-   gastos = [...gastos, addGasto];
-   return true;
-};
+  gastos = [...gastos, addGasto];
+  guardarGastos(gastos);
+  return true;
 };
 
 // con esta función seremos capaces de eliminar gastos del array.
