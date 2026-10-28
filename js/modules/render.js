@@ -1,3 +1,5 @@
+import { initEliminarGastos } from "./gastosEvents.js";
+
 export function renderGastos(gastos) {
 
   const bloqueGastos = document.querySelector(".gastos-list");
@@ -17,13 +19,24 @@ export function renderGastos(gastos) {
     const moneda = document.createElement("span");
     const monto = document.createElement("span")
     const fecha = document.createElement("span");
-    tarjeta.append(descripcion, categoria, monto, moneda, fecha);
+    const eliminarBoton = document.createElement('button');
+    const editarBoton = document.createElement('button');
+    tarjeta.append(descripcion, categoria, monto, moneda, fecha, eliminarBoton, editarBoton);
     descripcion.innerText = gasto.descripcion;
     categoria.innerText = gasto.categoria;
     moneda.innerText = gasto.moneda;
     monto.innerText = gasto.monto;
     fecha.innerText = gasto.fecha.split('-', 3).reverse().join('/');
+    eliminarBoton.innerText = 'eliminar'
+    eliminarBoton.dataset.id = gasto.id
+    eliminarBoton.classList.add('eliminar')
+    editarBoton.innerText = 'editar'
+    editarBoton.dataset.id = gasto.id
+    editarBoton.classList.add('editar')
   });
+
+  initEliminarGastos();
+
 }
 
 

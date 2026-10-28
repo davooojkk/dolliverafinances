@@ -1,4 +1,5 @@
 import { monedasValidas, categoriasValidas } from "./formData.js";
+import { renderGastos } from "./render.js";
 import { guardarGastos, importarGastos } from "./storage.js";
 
 // array que guarda los gastos en objetos y una función que devuelve la misma array
@@ -48,6 +49,7 @@ export function agregarGastos(nuevoGasto) {
 // con esta función seremos capaces de eliminar gastos del array.
 export function eliminarGastos(id) {
   gastos = gastos.filter((g) => g.id !== id);
+  renderGastos(gastos)
 };
 
 // aquí el usuario será capaz de editar los gastos del array
