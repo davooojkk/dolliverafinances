@@ -8,6 +8,8 @@ import {
 import { renderGastos } from "./modules/render.js";
 
 import { initSubmitFormulario } from "./modules/formEvents.js";
+import { initSubmitEdicion } from "./modules/gastosEvents.js";
 
-initSubmitFormulario()
+initSubmitFormulario();
+initSubmitEdicion();
 renderGastos(obtenerGastos());

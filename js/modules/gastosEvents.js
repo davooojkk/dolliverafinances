@@ -1,4 +1,4 @@
-import { eliminarGastos, editarGastos, gastos } from './gastos.js'
+import { eliminarGastos, editarGastos, obtenerGastos } from './gastos.js'
 import { renderGastos } from './render.js';
 
 
@@ -6,7 +6,11 @@ import { renderGastos } from './render.js';
 export function initEliminarGastos() {
     const botonesEliminar = document.querySelectorAll('.eliminar');
     botonesEliminar.forEach((boton) => {
-    boton.addEventListener('click', () => { eliminarGastos(Number(boton.dataset.id)) })});
+    boton.addEventListener('click', () => { 
+        eliminarGastos(Number(boton.dataset.id)) 
+        renderGastos(obtenerGastos())
+    })});
+    ;
 };
 
 export function initEditarGastos() {
@@ -14,7 +18,8 @@ export function initEditarGastos() {
     const formularioEditar = document.querySelector('#form-editar')
 
     botonesEditar.forEach((boton) => {
-        const gastoSeleccionado = gastos.find(g => g.id === Number(boton.dataset.id));
+        const gastosEventos = obtenerGastos()
+        const gastoSeleccionado = gastosEventos.find(g => g.id === Number(boton.dataset.id));
   
 
         boton.addEventListener('click', () => {
@@ -27,26 +32,38 @@ export function initEditarGastos() {
                 };
           });
     });
-
+    
 });
-
-const inputs = formularioEditar.querySelectorAll('input, select')
-
- formularioEditar.addEventListener('submit', (event) => {
-        event.preventDefault();
-        let cambios = {};
-        inputs.forEach((input) => {
-            const inputClave = input.id;
-            const inputValor = input.value;
-        
-            if(input.type === 'number') {
-                cambios[inputClave] = Number(inputValor);
-            } else {
-                cambios[inputClave] = inputValor;
-            }
-        })
-
-        editarGastos(Number(formularioEditar.dataset.id), cambios);
-        formularioEditar.classList.remove('editando')
-    });
 };
+
+
+export function initSubmitEdicion() {
+    const formularioEditar = document.querySelector('#form-editar')
+    const inputs = formularioEditar.querySelectorAll('input, select')
+
+    formularioEditar.addEventListener('submit', (event) => {
+            event.preventDefault();
+            let cambios = {};
+            inputs.forEach((input) => {
+                const inputClave = input.id;
+                const inputValor = input.value;
+                
+                if(input.type === 'number') {
+                    cambios[inputClave] = Number(inputValor);
+                } else {
+                    cambios[inputClave] = inputValor;
+                }
+            })
+
+            const edicion = editarGastos(Number(formularioEditar.dataset.id), cambios);
+                
+            if(edicion === true) {
+                renderGastos(obtenerGastos());
+                formularioEditar.classList.remove('editando')
+            } else {
+                window.alert('Los cambios no fueron aplicados. Revise por favor los datos ingresados!')
+            }
+        
+        });
+   
+}

@@ -385,13 +385,14 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* Estructura DOM: descripción, categoría, monto, moneda, fecha. */
+/* Estructura DOM: descripción, categoría, monto, moneda, fecha y acciones. */
 .gastos-list > div {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content max-content;
   grid-template-areas:
     "desc monto fecha"
-    "cat moneda fecha";
+    "cat moneda fecha"
+    "eliminar . editar";
   align-items: center;
   gap: var(--esp-2) var(--esp-5);
   min-width: 0;
@@ -463,19 +464,34 @@ a { color: inherit; text-decoration: none; }
 }
 
 .gastos-list > div > button {
-  max-width: fit-content;
-  padding: 0.2rem 0.5rem;
-  background-color: var(--rojo-dato);
-  border: none;
-  color: #f2f2f2;
+  min-height: 2.25rem;
+  margin-block-start: var(--esp-1);
+  padding: var(--esp-2) var(--esp-4);
+  border-radius: var(--radio);
+  font-size: var(--letra-sm);
+  font-weight: var(--peso-fuerte);
+  line-height: 1.2;
   cursor: pointer;
-  transition: .2s;
-  font-weight: 500;
+  transition:
+    background-color var(--rapido) var(--curva),
+    color var(--rapido) var(--curva),
+    border-color var(--rapido) var(--curva);
 }
 
-.gastos-list > div > button:hover {
-  background-color: var(--rojo-oscuro);
-  
+.gastos-list > div > .eliminar {
+  grid-area: eliminar;
+  justify-self: start;
+  background: var(--fondo-error);
+  color: var(--rojo-dato);
+  border: var(--linea-fina) solid var(--rojo);
+}
+
+.gastos-list > div > .editar {
+  grid-area: editar;
+  justify-self: end;
+  background: var(--panel);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde-campo);
 }
 
 /* El formulario de edición ocupa toda la pantalla sin cambiar su estructura. */
@@ -636,6 +652,17 @@ html:has(#form-editar.editando) { overflow: hidden; }
     background: var(--fondo-alto);
     border-bottom-color: var(--borde-hover);
   }
+
+  .gastos-list > div > .eliminar:hover {
+    background: var(--rojo);
+    color: var(--blanco);
+  }
+
+  .gastos-list > div > .editar:hover {
+    background: var(--blanco);
+    color: var(--negro);
+    border-color: var(--blanco);
+  }
 }
 
 /* 7. Responsive ----------------------------------------------------------- */
@@ -690,7 +717,8 @@ html:has(#form-editar.editando) { overflow: hidden; }
     grid-template-areas:
       "desc monto"
       "cat moneda"
-      "fecha fecha";
+      "fecha fecha"
+      "eliminar editar";
     column-gap: var(--esp-3);
     padding-inline: var(--esp-2);
   }
@@ -710,7 +738,8 @@ html:has(#form-editar.editando) { overflow: hidden; }
     grid-template-areas:
       "desc desc"
       "cat fecha"
-      "monto moneda";
+      "monto moneda"
+      "eliminar editar";
   }
 
   .gastos-list > div > span:nth-child(3) {

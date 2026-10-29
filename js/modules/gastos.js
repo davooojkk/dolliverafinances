@@ -1,33 +1,25 @@
 import { monedasValidas, categoriasValidas } from "./formData.js";
-import { renderGastos } from "./render.js";
 import { guardarGastos, importarGastos } from "./storage.js";
 
 // array que guarda los gastos en objetos y una función que devuelve la misma array
 
-export let gastos = importarGastos(); // los gastos se importan desde local storage
+let gastos = importarGastos(); // los gastos se importan desde local storage
 
 export function obtenerGastos() {
-  return gastos;
+  const gastosObtenidos = gastos.map((gasto) => {
+  return {...gasto}
+  }); // función básica que utilizaremos bastante, simplemente para no perder inmutabilidad
+  return gastosObtenidos;
 };
 
-export function validarGastos(nuevoGasto) { // para validar el gasto y no sobrecargar una funcion
-    if(!(Number.isFinite(nuevoGasto.monto) && nuevoGasto.monto > 0)) {
-      return false;
-    }
-    if(!(monedasValidas.includes(nuevoGasto.moneda))) {
-      return false;
-    };
-    if(!(categoriasValidas.includes(nuevoGasto.categoria))) {
-      return false;
-    };
-    if(nuevoGasto.descripcion.trim() === '') {
-      return false;
-    };
-    if(Number.isNaN(new Date(nuevoGasto.fecha).getTime())) {
-      return false;
-    };
+export function validarGastos(nuevoGasto) { // para validar el gasto y no sobrecargar una funcion, codigo ya ajustado!
+   const montoValido = Number.isFinite(nuevoGasto.monto) && nuevoGasto.monto > 0;
+   const monedaValida = monedasValidas.includes(nuevoGasto.moneda);  
+   const categoriaValida = categoriasValidas.includes(nuevoGasto.categoria);
+   const descripcionValida = typeof nuevoGasto.descripcion === 'string' && nuevoGasto.descripcion.trim() !== '';
+   const fechaValida = !(Number.isNaN(new Date(nuevoGasto.fecha).getTime()));
 
-    return true;
+  return montoValido && monedaValida && categoriaValida && descripcionValida && fechaValida;
 }; 
 
 // creamos una función que nos permite agregar un nuevo gasto al array.
@@ -49,26 +41,32 @@ export function agregarGastos(nuevoGasto) {
 // con esta función seremos capaces de eliminar gastos del array.
 export function eliminarGastos(id) {
   gastos = gastos.filter((g) => g.id !== id);
-  renderGastos(gastos)
+    guardarGastos(gastos);
 };
 
 // aquí el usuario será capaz de editar los gastos del array
 export function editarGastos(id, cambios) {
+  let edicionValidada = false;
   const gastosEditados = gastos.map((g) => {
     if (g.id === id) {
-      g = {
+      const gastoEditado = {
         ...g,
         ...cambios,
         id: g.id
       };
-
-      return g;
+      if (validarGastos(gastoEditado) === true) {
+          edicionValidada = true;
+          return gastoEditado;
+        }
+        return g;
     };
-
-    return g
+        return g;
   });
-  
-  gastos = gastosEditados;
-  renderGastos(gastos)
+
+  if(edicionValidada === true) {
+    gastos = gastosEditados;
+    guardarGastos(gastos);
+  }
+
+  return edicionValidada;
 };
- 
