@@ -1,4 +1,4 @@
-import { initEliminarGastos } from "./gastosEvents.js";
+import { initEditarGastos, initEliminarGastos } from "./gastosEvents.js";
 
 export function renderGastos(gastos) {
 
@@ -36,6 +36,7 @@ export function renderGastos(gastos) {
   });
 
   initEliminarGastos();
+  initEditarGastos();
 
 }
 

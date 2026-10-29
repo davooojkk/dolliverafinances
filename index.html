@@ -36,7 +36,7 @@
             <option value="usd">Dolares Estadounidenses</option>
           </select>
             <label for="monto">
-              Monto:
+              Monto: 
             </label>
           <input id="monto" type="number" min="0" step="0.01"  placeholder="Ej: 350..." required>
             <label for="categoria">
@@ -63,6 +63,44 @@
       <div class="gastos-list">
       </div>
     </section>
+    <form id="form-editar">
+          <h2>Editar gasto</h2>
+          <label for="descripcion">
+              Descripción del Gasto:
+            </label>
+          <input id="descripcion" type="text" placeholder="Ej: Compras Supermercado..." required>
+            <label for="moneda">
+              Moneda:
+            </label>
+          <select name="moneda" id="moneda">
+            <option value="brl">Reales Brasileros</option>
+            <option value="uyu">Pesos Uruguayos</option>
+            <option value="usd">Dolares Estadounidenses</option>
+          </select>
+            <label for="monto">
+              Monto: 
+            </label>
+          <input id="monto" type="number" min="0" step="0.01"  placeholder="Ej: 350..." required>
+            <label for="categoria">
+                Categoria:
+            </label>
+          <select name="categoria" id="categoria">
+              <option value="gasto fijo">gasto fijo</option>
+              <option value="insumos">insumos</option>
+              <option value="consumo">consumo</option>
+              <option value="salud-cuidado">salud-cuidado</option>
+              <option value="fastfood">fastfood</option>
+              <option value="hogar">hogar</option>
+              <option value="transporte">transporte</option>
+              <option value="mascota">mascota</option>
+          </select>
+            <label for="fecha">
+              Fecha:
+            </label>
+          <input id="fecha" type="date" required>
+          <button type="submit">Guardar cambios</button>
+          <p id="mensaje-error">No se pudieron guardar los cambios. Revisá el monto ingresado.</p>
+    </form>
     <script type="module" src="./js/main.js"></script>
   </body>
 </html>

@@ -478,6 +478,144 @@ a { color: inherit; text-decoration: none; }
   
 }
 
+/* El formulario de edición ocupa toda la pantalla sin cambiar su estructura. */
+#form-editar { display: none; }
+
+html:has(#form-editar.editando) { overflow: hidden; }
+
+#form-editar.editando {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--capa-header) + 1);
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+  align-content: start;
+  align-items: center;
+  gap: var(--esp-4) var(--esp-6);
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  margin: 0;
+  padding: clamp(var(--esp-6), 12vh, var(--esp-8))
+    max(var(--aire-x), calc((100vw - var(--ancho)) / 2))
+    max(var(--esp-7), env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: linear-gradient(145deg, var(--fondo-alto), var(--fondo) 60%);
+  color: var(--blanco);
+  animation: aparecer var(--suave) var(--curva) both;
+}
+
+#form-editar h2 {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-4);
+  grid-column: 1 / -1;
+  margin: 0 0 var(--esp-5);
+  padding-block-end: var(--esp-5);
+  border-bottom: var(--linea-fina) solid var(--borde);
+  font: var(--peso-titulo) clamp(2.25rem, 5vw, 3.5rem) / var(--linea-titulo) var(--titulos);
+  letter-spacing: var(--letras-titulo);
+}
+
+#form-editar h2::before {
+  content: "";
+  flex: none;
+  width: var(--linea-gruesa);
+  height: var(--alto-marca);
+  background: var(--rojo-vivo);
+}
+
+#form-editar > label {
+  color: var(--texto);
+  font-size: var(--letra-sm);
+  font-weight: var(--peso-medio);
+  line-height: 1.4;
+}
+
+#form-editar > :is(input, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: calc(var(--alto-campo) + var(--esp-2));
+  padding: var(--esp-3) var(--esp-4);
+  background-color: var(--fondo);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde-campo);
+  border-radius: var(--radio);
+  font-size: var(--letra-base);
+  transition: border-color var(--rapido) var(--curva), background-color var(--rapido) var(--curva);
+}
+
+#form-editar > input::placeholder { color: var(--texto-suave); opacity: 1; }
+
+#form-editar > :is(input, select):focus {
+  background-color: var(--fondo-alto);
+  border-color: var(--rojo-vivo);
+}
+
+#form-editar > :is(input, select):is([aria-invalid="true"], :user-invalid) {
+  border-color: var(--rojo-vivo);
+}
+
+#form-editar > input[type="number"] {
+  font-weight: var(--peso-fuerte);
+  font-variant-numeric: tabular-nums;
+}
+
+#form-editar > :is(select, input[type="date"]) { cursor: pointer; }
+
+#form-editar > select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-end: calc(var(--flecha-borde) + 2 * var(--flecha-lado) + var(--flecha-aire));
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--texto) 50%),
+    linear-gradient(135deg, var(--texto) 50%, transparent 50%);
+  background-repeat: no-repeat;
+  background-size:
+    var(--flecha-lado) var(--flecha-lado),
+    var(--flecha-lado) var(--flecha-lado);
+  background-position:
+    right calc(var(--flecha-borde) + var(--flecha-lado)) center,
+    right var(--flecha-borde) center;
+}
+
+#form-editar > select option { background: var(--panel); color: var(--blanco); }
+
+#form-editar > button[type="submit"] {
+  grid-column: 2;
+  justify-self: end;
+  min-height: calc(var(--alto-campo) + var(--esp-2));
+  margin-block-start: var(--esp-4);
+  padding: var(--esp-3) var(--esp-6);
+  background: var(--rojo);
+  color: var(--blanco);
+  border: var(--linea-fina) solid var(--rojo-vivo);
+  border-radius: var(--radio);
+  font-size: var(--letra-boton);
+  font-weight: var(--peso-fuerte);
+  cursor: pointer;
+  transition: background-color var(--rapido) var(--curva), color var(--rapido) var(--curva);
+}
+
+#form-editar > button[type="submit"]:active { background: var(--rojo-oscuro); }
+
+#form-editar > #mensaje-error {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+@media (hover: hover) {
+  #form-editar > :is(input, select):not(:focus, :user-invalid):hover {
+    border-color: var(--borde-hover);
+  }
+
+  #form-editar > button[type="submit"]:hover {
+    background: var(--rojo-vivo);
+    color: var(--negro);
+  }
+}
+
 /* Hover solo cuando hay puntero real. */
 @media (hover: hover) {
   .header-list li a:hover {
@@ -503,6 +641,21 @@ a { color: inherit; text-decoration: none; }
 /* 7. Responsive ----------------------------------------------------------- */
 /* Los límites de @media deben ser literales; var() no funciona ahí. */
 @media (max-width: 45rem) {
+  #form-editar.editando {
+    grid-template-columns: minmax(0, 1fr);
+    align-content: start;
+    row-gap: var(--esp-2);
+    padding-block-start: var(--esp-6);
+  }
+
+  #form-editar h2 { margin-block-end: var(--esp-3); }
+  #form-editar > label { margin-block-start: var(--esp-3); }
+  #form-editar > button[type="submit"] {
+    grid-column: 1;
+    justify-self: stretch;
+    margin-block-start: var(--esp-5);
+  }
+
   #gastos-form {
     grid-template-columns: minmax(0, 1fr);
     row-gap: var(--esp-2);

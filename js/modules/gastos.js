@@ -4,7 +4,7 @@ import { guardarGastos, importarGastos } from "./storage.js";
 
 // array que guarda los gastos en objetos y una función que devuelve la misma array
 
-let gastos = importarGastos(); // los gastos se importan desde local storage
+export let gastos = importarGastos(); // los gastos se importan desde local storage
 
 export function obtenerGastos() {
   return gastos;
@@ -69,5 +69,6 @@ export function editarGastos(id, cambios) {
   });
   
   gastos = gastosEditados;
+  renderGastos(gastos)
 };
  
