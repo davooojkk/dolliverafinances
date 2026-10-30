@@ -1,4 +1,4 @@
-import { ordenarGastos } from "./gastos.js";
+import { ordenarGastos } from "./gastos/gastos.js";
 
 const bloqueGastos = document.querySelector(".gastos-list");
 

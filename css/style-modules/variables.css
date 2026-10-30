@@ -1,0 +1,70 @@
+/* Sistema de diseño: colores, tipografía, espaciado, medidas y movimiento. */
+:root {
+  /* Colores */
+  --negro: #0d0d0d;
+  --blanco: #f7f7f7;
+  --rojo: #bc0202;
+  --rojo-vivo: #f00;
+
+  --fondo: #0f0f0f;
+  --panel: #1d1d1d;
+  --borde: #3a3a3a;
+  --borde-hover: #e5e5e5;
+  --texto: #dadada;
+  --texto-suave: #9d9d9d;
+
+  /* Tipografía */
+  --titulos: "Inter", sans-serif;
+  --mono: "IBM Plex Mono", monospace;
+  --letra-xs: 0.6875rem;
+  --letra-sm: 0.75rem;
+  --letra-base: 0.9375rem;
+  --letra-boton: 0.875rem;
+  --letra-sub: clamp(1rem, 1.6vw, 1.125rem);
+  --letra-monto: clamp(1.125rem, 2.5vw, 1.375rem);
+  --letra-titulo: clamp(2rem, 5vw, 3rem);
+  --letra-marca: clamp(1.75rem, 4.5vw, 2.5rem);
+
+  --linea: 1.6;
+  --linea-titulo: 1.1;
+  --letras-titulo: -0.03em;
+  --letras-label: 0.1em;
+  --letras-micro: 0.12em;
+  --letras-monto: 0.02em;
+
+  /* Espacios: múltiplos de 4, sin valores sueltos en componentes */
+  --esp-1: 0.25rem;
+  --esp-2: 0.5rem;
+  --esp-3: 0.75rem;
+  --esp-4: 1rem;
+  --esp-5: 1.5rem;
+  --esp-6: 2rem;
+  --esp-7: 3rem;
+  --esp-8: 4rem;
+  --aire-x: clamp(var(--esp-4), 4vw, var(--esp-6));
+  --aire-y: clamp(var(--esp-6), 6vw, var(--esp-7));
+  --aire-panel: clamp(var(--esp-4), 3vw, var(--esp-6));
+  --separacion: clamp(var(--esp-6), 5vw, var(--esp-7));
+
+  /* Medidas y controles */
+  --ancho: 57.5rem;
+  --alto-campo: 2.75rem;
+  --radio: 0.375rem;
+  --linea-fina: 1px;
+  --linea-gruesa: 2px;
+  --foco: 2px;
+  --alto-marca: 0.85em;
+  --fondo-gradiente: 60vh;
+  --capa-header: 10;
+  --opacidad-inactiva: 0.55;
+
+  /* Interacciones */
+  --rapido: 150ms;
+  --suave: 220ms;
+  --curva: cubic-bezier(0.2, 0.75, 0.2, 1);
+  --desplazamiento: 0.375rem;
+  --presion: 0.125rem;
+  --mensaje-vacio: "Sin gastos registrados. Cargá el primero en el formulario de arriba.";
+
+  color-scheme: dark;
+}

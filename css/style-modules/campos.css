@@ -1,0 +1,71 @@
+/* Apariencia común de los campos de alta y edición. */
+#gastos-form :is(input, select),
+#form-editar > :is(input, select) {
+  width: 100%; min-width: 0;
+  background-color: var(--fondo); color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde);
+  border-radius: var(--radio);
+  font-size: var(--letra-base);
+  transition: background-color var(--rapido) var(--curva),
+    border-color var(--rapido) var(--curva);
+}
+
+#gastos-form input::placeholder,
+#form-editar > input::placeholder { color: var(--texto-suave); opacity: 1; }
+
+#gastos-form :is(input, select):is(:focus, [aria-invalid="true"], :user-invalid),
+#form-editar > :is(input, select):is(:focus, [aria-invalid="true"], :user-invalid) {
+  border-color: var(--rojo-vivo);
+}
+
+/* Números, listas desplegables y selección de fecha. */
+#monto, #form-editar > input[type="number"] {
+  font-weight: 600; font-variant-numeric: tabular-nums;
+}
+
+#monto { letter-spacing: var(--letras-monto); }
+
+#gastos-form :is(select, input[type="date"]),
+#form-editar > :is(select, input[type="date"]) { cursor: pointer; }
+
+#gastos-form select option,
+#form-editar > select option { background: var(--panel); color: var(--blanco); }
+
+/* Botones compartidos: posición y transición específicas en cada formulario. */
+#gastos-form button,
+#form-editar > button[type="submit"] {
+  padding: var(--esp-3) var(--esp-6);
+  background: var(--rojo); color: var(--blanco);
+  border: var(--linea-fina) solid var(--rojo-vivo);
+  border-radius: var(--radio);
+  font-size: var(--letra-boton); font-weight: 600;
+  cursor: pointer;
+}
+
+/* Flecha decorativa: se conserva en los demás campos. */
+:is(#gastos-form, #form-editar) :is(input, select) {
+  appearance: none;
+  padding-right: 30px;
+  background-image:
+    linear-gradient(45deg, transparent 50%, white 50%),
+    linear-gradient(135deg, white 50%, transparent 50%);
+  background-position: right 17px center, right 12px center;
+  background-size: 5px 5px;
+  background-repeat: no-repeat;
+}
+
+/* Fecha: conservar solo el ícono nativo del calendario. */
+:is(#gastos-form, #form-editar) input[type="date"] { background-image: none; }
+
+/* Hover de los campos, solo con puntero. */
+@media (hover: hover) {
+  #form-editar > :is(input, select):not(:focus, :user-invalid):hover,
+  #gastos-form :is(input, select):not(:disabled, :focus, :user-invalid, [aria-invalid="true"]):hover {
+    border-color: var(--borde-hover);
+  }
+
+  #form-editar > button[type="submit"]:hover,
+  #gastos-form button:not(:disabled, :active):hover {
+    background: var(--rojo-vivo); color: var(--negro);
+  }
+}

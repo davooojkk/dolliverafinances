@@ -1,5 +1,6 @@
 import { eliminarGastos, editarGastos, obtenerGastos } from "./gastos.js";
-import { renderGastos } from "./render.js";
+import { renderGastos } from "../render.js";
+import { obtenerDatosFormulario } from "../formulario/formUtils.js";
 
 export function initEventosGastos() {
   const gastosList = document.querySelector(".gastos-list");
@@ -46,7 +47,7 @@ export function initSubmitEdicion() {
 
   formularioEditar.addEventListener('submit', (event) => {
     event.preventDefault();
-    const edicion = editarGastos(String(formularioEditar.dataset.id), obtenerCambiosFormulario(formularioEditar));
+    const edicion = editarGastos(String(formularioEditar.dataset.id), obtenerDatosFormulario(formularioEditar));
 
     if(edicion) {
         renderGastos(obtenerGastos());
@@ -57,23 +58,4 @@ export function initSubmitEdicion() {
   });
 
   
-}
-
-function obtenerCambiosFormulario(formulario) {
-    const inputs = formulario.querySelectorAll("input, select");
-
-    let cambios = {};
-    inputs.forEach((input) => {
-        const inputClave = input.id;
-        const inputValor = input.value;
-
-        if (input.type === "number") {
-        cambios[inputClave] = Number(inputValor);
-        } else {
-        cambios[inputClave] = inputValor
-        }
-
-    });
-
-    return cambios;
 }

@@ -1,0 +1,56 @@
+/* Cabecera fija y navegación. */
+.header {
+  position: sticky; top: 0;
+  z-index: var(--capa-header);
+  background: var(--fondo);
+  border-bottom: var(--linea-fina) solid var(--borde);
+}
+
+.header-list {
+  display: flex; flex-wrap: wrap; align-items: center;
+  gap: var(--esp-2) var(--esp-5);
+  max-width: var(--ancho);
+  margin-inline: auto;
+  padding: var(--esp-3) var(--aire-x);
+}
+
+.header-list li:first-child {
+  display: flex; flex-wrap: wrap; align-items: baseline;
+  gap: var(--esp-2) var(--esp-3);
+  min-width: 0;
+  margin-inline-end: auto;
+}
+
+.header-list li:first-child p {
+  color: var(--blanco);
+  font: 900 var(--letra-marca) / var(--linea-titulo) var(--titulos);
+  letter-spacing: var(--letras-titulo);
+  text-transform: lowercase;
+}
+
+.header-list li:first-child span {
+  color: var(--rojo-vivo);
+  font-size: var(--letra-xs); font-weight: 500;
+  letter-spacing: var(--letras-micro);
+  text-transform: uppercase;
+}
+
+.header-list li a {
+  display: inline-flex; align-items: center;
+  min-height: var(--alto-campo);
+  color: var(--texto-suave);
+  font-size: var(--letra-sm); font-weight: 500;
+  letter-spacing: var(--letras-label);
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: var(--esp-1);
+  transition: color var(--rapido) var(--curva),
+    text-decoration-color var(--rapido) var(--curva);
+}
+
+.header-list li:last-child {
+  color: var(--texto);
+  font-size: var(--letra-xs); letter-spacing: var(--letras-label);
+  text-transform: uppercase;
+}

@@ -3,8 +3,14 @@ export function guardarGastos(gastos) {
 }
 
 export function importarGastos() {
-     return JSON.parse(localStorage.getItem("gastos")) ?? []; 
+     try {
+        return JSON.parse(localStorage.getItem("gastos")) ?? []; 
+     }
 
+     catch {
+        console.error('JSON corrupto');
+        return [];
+     }
      /* 
         aprendi dos cosas interesantes
 
@@ -13,3 +19,4 @@ export function importarGastos() {
         y ?? que sirve para darle alternativas a js caso el primer valor sea null.
      */
 }
+

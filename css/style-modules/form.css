@@ -1,0 +1,54 @@
+/* Panel y distribución del formulario de alta. */
+.gastos-form-block {
+  padding: var(--aire-panel); background: var(--panel);
+  border: var(--linea-fina) solid var(--borde);
+  border-radius: var(--radio);
+}
+
+#gastos-form {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: center; gap: var(--esp-4);
+}
+
+#gastos-form label {
+  color: var(--texto);
+  font-size: var(--letra-xs); font-weight: 500;
+  letter-spacing: var(--letras-label);
+  line-height: var(--linea);
+  text-align: right; text-transform: uppercase;
+}
+
+/* Altura y espaciado exclusivos del formulario de alta. */
+#gastos-form :is(input, select) {
+  min-height: var(--alto-campo); padding: var(--esp-2) var(--esp-4);
+}
+
+/* Posición y tipografía exclusivas del botón de alta. */
+#gastos-form button {
+  grid-column: 2; justify-self: start;
+  min-height: var(--alto-campo);
+  letter-spacing: var(--letras-label); text-transform: uppercase;
+}
+
+#gastos-form button:active:not(:disabled) {
+  background: #830000;
+  transform: translateY(var(--presion));
+}
+
+#gastos-form :is(input, select, button):disabled {
+  opacity: var(--opacidad-inactiva); cursor: not-allowed;
+}
+
+/* Mensaje de error: el JS controla la clase .error. */
+#mensaje-error {
+  display: none; grid-column: 1 / -1;
+  padding: var(--esp-3) var(--esp-4);
+  background: var(--fondo); color: var(--blanco);
+  border: var(--linea-fina) solid var(--borde);
+  border-left: var(--linea-gruesa) solid var(--rojo-vivo);
+  border-radius: var(--radio);
+  font-size: var(--letra-sm); line-height: var(--linea);
+}
+
+#mensaje-error.error { display: block; animation: aparecer var(--suave) var(--curva) both; }

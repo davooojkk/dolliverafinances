@@ -1,0 +1,22 @@
+/* Aparición de gastos y mensajes. */
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(var(--desplazamiento)); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Accesibilidad: sin movimiento cuando el usuario lo solicita. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+
+  #gastos-form button:active:not(:disabled) { transform: none; }
+}
+
+/* Barras de desplazamiento en navegadores WebKit. */
+::-webkit-scrollbar { width: var(--esp-2); height: var(--esp-2); }
+::-webkit-scrollbar-track { background: var(--fondo); }
+::-webkit-scrollbar-thumb { background: var(--borde); border-radius: var(--radio); }
+::-webkit-scrollbar-thumb:hover { background: var(--borde-hover); }
