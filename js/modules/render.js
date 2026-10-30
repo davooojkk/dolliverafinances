@@ -1,45 +1,45 @@
-import { initEditarGastos, initEliminarGastos } from "./gastosEvents.js";
+import { ordenarGastos } from "./gastos.js";
+
+const bloqueGastos = document.querySelector(".gastos-list");
+
 
 export function renderGastos(gastos) {
-
-  const bloqueGastos = document.querySelector(".gastos-list");
-  const gastosOrdenados = gastos.toSorted((a, b) => {
-  const fechaA = a.fecha.split("/").reverse().join("-");
-  const fechaB = b.fecha.split("/").reverse().join("-");
-
-    return fechaB.localeCompare(fechaA);
-  });
-
   bloqueGastos.innerHTML = "";
+  const gastosOrdenados = ordenarGastos(gastos);
+
   gastosOrdenados.forEach((gasto) => {
-    const tarjeta = document.createElement("div");
-    bloqueGastos.appendChild(tarjeta);
-    const descripcion = document.createElement("p");
-    const categoria = document.createElement("p");
-    const moneda = document.createElement("span");
-    const monto = document.createElement("span")
-    const fecha = document.createElement("span");
-    const eliminarBoton = document.createElement('button');
-    const editarBoton = document.createElement('button');
-    tarjeta.append(descripcion, categoria, monto, moneda, fecha, eliminarBoton, editarBoton);
-    descripcion.innerText = gasto.descripcion;
-    categoria.innerText = gasto.categoria;
-    moneda.innerText = gasto.moneda;
-    monto.innerText = gasto.monto;
-    fecha.innerText = gasto.fecha.split('-', 3).reverse().join('/');
-    eliminarBoton.innerText = 'eliminar'
-    eliminarBoton.dataset.id = gasto.id
-    eliminarBoton.classList.add('eliminar')
-    editarBoton.innerText = 'editar'
-    editarBoton.dataset.id = gasto.id
-    editarBoton.classList.add('editar')
-  });
+    const tarjetaCreada = crearTarjeta(gasto)
+    bloqueGastos.appendChild(tarjetaCreada);
+  })
 
-  initEliminarGastos();
-  initEditarGastos();
-
+  // aprendiendo propagación de eventos, básicamente para reducir la cantidad de eventos que no aportan, reducimos esto 
+  // a tan solo un eventListener que tendrá la propia lista y luego finalmente con event.target seleccionaremos el objetivo del evento!
 }
 
+function crearTarjeta(gasto) { // ahora separamos las
+  const tarjeta = document.createElement("div");
+  const descripcion = document.createElement("p");
+  const categoria = document.createElement("p");
+  const moneda = document.createElement("span");
+  const monto = document.createElement("span")
+  const fecha = document.createElement("span");
+  const eliminarBoton = document.createElement('button');
+  const editarBoton = document.createElement('button');
+  descripcion.innerText = gasto.descripcion;
+  categoria.innerText = gasto.categoria;
+  moneda.innerText = gasto.moneda;
+  monto.innerText = gasto.monto;
+  fecha.innerText = gasto.fecha.split('-').reverse().join('/');
+  eliminarBoton.innerText = 'eliminar'
+  eliminarBoton.dataset.id = gasto.id
+  eliminarBoton.classList.add('eliminar')
+  editarBoton.innerText = 'editar'
+  editarBoton.dataset.id = gasto.id
+  editarBoton.classList.add('editar')   
+  tarjeta.append(descripcion, categoria, monto, moneda, fecha, eliminarBoton, editarBoton);
+
+  return tarjeta;
+}
 
 /**
  * Aquí renderizamos los objetos de la lista para que todos los gastos aparezcan en la home.

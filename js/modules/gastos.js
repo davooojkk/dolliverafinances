@@ -28,11 +28,7 @@ export function agregarGastos(nuevoGasto) {
   if(!(validarGastos(nuevoGasto))) {
     return false;
   } 
-  let randomNumber = Math.floor(1 + (Math.random() * 10000));
-  while  ((gastos.some(gasto => gasto.id === randomNumber))) {
-      randomNumber = Math.floor(1 + ( Math.random()  * 10000));
-  };
-  const addGasto = {...nuevoGasto, id: randomNumber,}
+  const addGasto = {...nuevoGasto, id: crypto.randomUUID(),}
   gastos = [...gastos, addGasto];
   guardarGastos(gastos);
   return true;
@@ -40,15 +36,21 @@ export function agregarGastos(nuevoGasto) {
 
 // con esta función seremos capaces de eliminar gastos del array.
 export function eliminarGastos(id) {
-  gastos = gastos.filter((g) => g.id !== id);
-    guardarGastos(gastos);
+  const gastosNuevos = gastos.filter((g) => String(g.id) !== String(id));
+  if(gastosNuevos.length < gastos.length) {
+    gastos = gastosNuevos;
+    guardarGastos(gastos)
+    return true;
+  }
+      
+  return false;
 };
 
 // aquí el usuario será capaz de editar los gastos del array
 export function editarGastos(id, cambios) {
   let edicionValidada = false;
   const gastosEditados = gastos.map((g) => {
-    if (g.id === id) {
+    if (String(g.id) === String(id)) {
       const gastoEditado = {
         ...g,
         ...cambios,
@@ -70,3 +72,9 @@ export function editarGastos(id, cambios) {
 
   return edicionValidada;
 };
+
+export function ordenarGastos(gastos) {
+ return gastos.toSorted((a, b) => {
+    return b.fecha.localeCompare(a.fecha);
+  });
+}
