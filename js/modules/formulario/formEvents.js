@@ -13,6 +13,7 @@ function submitFormulario(event) {
     const gastoAgregado = agregarGastos(nuevoGasto);
     if(gastoAgregado === true) {
         renderGastos(obtenerGastos());
+        actualizarTotalMoneda();
         mensajeError.classList.remove("error")
     } else {
         mensajeError.classList.add('error');

@@ -1,0 +1,97 @@
+
+/* Contenedor de dashboards */
+.dashboards {
+  margin-top: var(--aire-y);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
+}
+
+/* Tarjeta */
+#gastos-moneda {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: 6px;
+}
+
+/* Título */
+#gastos-moneda h2 {
+  margin: 0 0 16px;
+  padding-left: 8px;
+  border-left: 3px solid var(--rojo-vivo);
+  color: var(--blanco);
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+/* Formulario */
+#formulario-gastos-moneda {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Selector de moneda */
+#monedas {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  padding: 10px 8px;
+  background: var(--fondo);
+  color: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 4px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+#monedas:focus {
+  border-color: var(--rojo-vivo);
+  outline: none;
+}
+
+@media (hover: hover) {
+  #formulario-gastos-moneda input[type="button"]:hover {
+    background: var(--rojo-vivo);
+  }
+}
+
+#formulario-gastos-moneda input[type="button"]:focus-visible {
+  outline: 2px solid var(--blanco);
+  outline-offset: 3px;
+}
+
+/* Resultado */
+.datos-gastos-moneda {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--borde);
+  text-align: center;
+}
+
+/* Total calculado */
+#total-moneda {
+  color: var(--rojo-vivo);
+  font-size: 1.8rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+/* Moneda seleccionada */
+#moneda-seleccionada {
+  margin: 0;
+  color: var(--texto-suave);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}

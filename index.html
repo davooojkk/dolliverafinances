@@ -17,6 +17,31 @@
         </ul>
       </nav>
     </header>
+
+    <main class="app-layout">
+      <section class="dashboards">
+      <aside id="gastos-moneda">
+        <div>
+          <h2>Gastos por moneda</h2>
+          <form id="formulario-gastos-moneda">
+            <select name="Monedas" id="monedas">
+                <option value="brl">Reales Brasileros</option>
+                <option value="uyu">Pesos Uruguayos</option>
+                <option value="usd">Dolares Estadounidenses</option>
+            </select>
+          </form>
+        </div>
+        <div class="datos-gastos-moneda">
+          <output id="total-moneda">0</output>
+          <p id="moneda-seleccionada"></p>
+        </div>
+      </aside>
+      <aside id="grafico-gastos">
+        
+
+      </aside>
+      <aside id="cotizacion-oficial"></aside>
+    </section>
     <section class="gastos-list-block" aria-label="Lista completa de gastos">
       <div class="label-gastos-list">
         <p>Todos los gastos</p>
@@ -63,6 +88,8 @@
       <div class="gastos-list">
       </div>
     </section>
+    </main>
+
     <form id="form-editar">
           <h2>Editar gasto</h2>
           <label for="descripcion">
