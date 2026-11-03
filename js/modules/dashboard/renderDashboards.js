@@ -14,8 +14,12 @@ const graficoGastos = document.querySelector('#grafico-gastos')
 let instanciaGrafico = null;
 
 export function renderGraficoCategorias(porcentajes) {
-    graficoGastos.hidden = !porcentajes || Object.keys(porcentajes).length === 0;
-    if (graficoGastos.hidden) return;
+    const canvas = document.querySelector('#grafico-categorias');
+    const parrafo = document.querySelector('#grafico-gastos p');
+    const sinGastos = !porcentajes || Object.keys(porcentajes).length === 0;
+    parrafo.hidden = !sinGastos;
+    canvas.style.display = sinGastos ? 'none' : 'block';
+    if (sinGastos) return;
 
     const labels = Object.keys(porcentajes);
     const data = Object.values(porcentajes);
@@ -26,16 +30,31 @@ export function renderGraficoCategorias(porcentajes) {
         instanciaGrafico.update();
         return;
     }
-    const canvas = document.querySelector('#grafico-categorias');
+
+    const coloresCategorias = {
+        consumo: '#a6aab2',
+        fastfood: '#ef4548',
+        'gasto fijo': '#59b4bb',
+        insumos: '#7795a3',
+        'salud-cuidado': '#688773',
+        hogar: 'b4a6b5',
+        mascota: '#d88a65',
+        transporte: '#8c66ab'
+    };
+
+    const backgroundColores = labels.map((label) => {
+        return coloresCategorias[label]
+    });
+
     instanciaGrafico = new Chart(canvas, {
         type: 'pie',
         data: {
             labels: labels,
             datasets: [{
                 data: data,
-                backgroundColor: ['#ef4548', '#d88a65', '#7795a3', '#b4a6b5', '#bb8e59', '#688773', '#ab667e', '#a6aab2'],
+                backgroundColor: backgroundColores,
                 borderColor: '#171b1e',
-                borderWidth: 2,
+                borderWidth: 0,
             }]
         },
         options: {
@@ -60,3 +79,5 @@ export function actualizarGrafico() {
 
     renderGraficoCategorias(porcentajes);
 }
+
+

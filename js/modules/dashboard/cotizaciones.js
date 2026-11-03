@@ -19,9 +19,13 @@ async function cotizacionDolar() {
     }
 }
 
-export async function iniciarCotizaciones() {
-    await cotizacionDolar();
-    setInterval(cotizacionDolar, 300  * 1000)
+export async function iniciarCotizaciones(actualizarGrafico) {
+    await cotizacionDolar()
+    await actualizarGrafico()
+    setInterval(async () => { 
+        await cotizacionDolar(); 
+        await actualizarGrafico();
+    }, 300 * 1000);
 };
 
 export function obtenerCotizaciones() {

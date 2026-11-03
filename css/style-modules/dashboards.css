@@ -60,5 +60,29 @@
 }
 
 #grafico-categorias { display: block; max-width: 100%; margin-inline: auto; }
+
+/* Estado vacío del gráfico: mensaje centrado sin datos detrás. */
+#grafico-gastos p:not([hidden]) {
+  position: absolute;
+  inset: var(--esp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--esp-4);
+  color: var(--texto);
+  font: 600 var(--letra-sm)/1.5 var(--titulos);
+  text-align: center;
+  text-wrap: balance;
+}
+
+#grafico-gastos p:not([hidden])::before {
+  content: "";
+  width: 2rem; height: 2px;
+  border-radius: 2px;
+  background: var(--rojo-vivo);
+}
+
+#grafico-gastos:has(p:not([hidden])) canvas { visibility: hidden; }
 #grafico-gastos[hidden] { display: none; }
 #cotizacion-oficial:empty { display: none; }
