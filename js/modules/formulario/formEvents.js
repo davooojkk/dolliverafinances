@@ -1,3 +1,5 @@
+import { actualizarTotalMonedas } from "../dashboard/dashboardEvents.js";
+import { actualizarGrafico } from "../dashboard/renderDashboards.js";
 import { agregarGastos, obtenerGastos } from "../gastos/gastos.js";
 import { renderGastos } from "../render.js";
 import { obtenerDatosFormulario } from "./formUtils.js";
@@ -13,7 +15,8 @@ function submitFormulario(event) {
     const gastoAgregado = agregarGastos(nuevoGasto);
     if(gastoAgregado === true) {
         renderGastos(obtenerGastos());
-        actualizarTotalMoneda();
+        actualizarTotalMonedas();
+        actualizarGrafico();
         mensajeError.classList.remove("error")
     } else {
         mensajeError.classList.add('error');

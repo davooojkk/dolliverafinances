@@ -1,13 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@600;800;900&display=swap");
 
-/* Orden de capas: sistema, componentes, ajustes de pantalla y detalles finales. */
+/* Sistema, secciones, controles y ajustes finales de pantalla. */
 @import "./style-modules/variables.css";
 @import "./style-modules/base.css";
 @import "./style-modules/header.css";
 @import "./style-modules/contenido.css";
 @import "./style-modules/form.css";
+@import "./style-modules/campos.css";
 @import "./style-modules/lista.css";
+@import "./style-modules/dashboards.css";
 @import "./style-modules/responsive.css";
 @import "./style-modules/movements.css";
-@import "./style-modules/campos.css";
-@import "./style-modules/dashboards.css";

@@ -1,18 +1,17 @@
-/* Aparición de gastos y mensajes. */
+/* Respuesta breve solo al abrir edición o recibir un mensaje. */
 @keyframes aparecer {
-  from { opacity: 0; transform: translateY(var(--desplazamiento)); }
+  from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Accesibilidad: sin movimiento cuando el usuario lo solicita. */
+/* Accesibilidad: ningún movimiento forzado. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
   }
-
-  #gastos-form button:active:not(:disabled) { transform: none; }
+  :is(#gastos-form button, #form-editar > button[type="submit"]):active { transform: none; }
 }
 
 /* Barras de desplazamiento en navegadores WebKit. */

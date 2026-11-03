@@ -1,54 +1,107 @@
-/* Panel y distribución del formulario de alta. */
+/* Alta: pares de etiqueta/campo distribuidos en dos filas. */
 .gastos-form-block {
-  padding: var(--aire-panel); background: var(--panel);
-  border: var(--linea-fina) solid var(--borde);
-  border-radius: var(--radio);
+  padding: var(--aire-panel);
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-panel);
+  box-shadow: 0 20px 56px rgb(0 0 0 / 12%);
 }
 
 #gastos-form {
   display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: center; gap: var(--esp-4);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-areas:
+    "ld ld lm" "d d m"
+    "la lc lf" "a c f"
+    "action action action" "error error error";
+  gap: var(--esp-2) var(--esp-4);
 }
+
+/* Las áreas siguen el orden existente del HTML; no hay envoltorios nuevos. */
+#gastos-form > :nth-child(1) { grid-area: ld; }
+#gastos-form > :nth-child(2) { grid-area: d; }
+#gastos-form > :nth-child(3) { grid-area: lm; }
+#gastos-form > :nth-child(4) { grid-area: m; }
+#gastos-form > :nth-child(5) { grid-area: la; }
+#gastos-form > :nth-child(6) { grid-area: a; }
+#gastos-form > :nth-child(7) { grid-area: lc; }
+#gastos-form > :nth-child(8) { grid-area: c; }
+#gastos-form > :nth-child(9) { grid-area: lf; }
+#gastos-form > :nth-child(10) { grid-area: f; }
+#gastos-form > button { grid-area: action; }
+#gastos-form > #mensaje-error { grid-area: error; }
 
 #gastos-form label {
+  align-self: end;
   color: var(--texto);
-  font-size: var(--letra-xs); font-weight: 500;
-  letter-spacing: var(--letras-label);
-  line-height: var(--linea);
-  text-align: right; text-transform: uppercase;
+  font: 600 var(--letra-sm)/1.35 var(--titulos);
 }
 
-/* Altura y espaciado exclusivos del formulario de alta. */
-#gastos-form :is(input, select) {
-  min-height: var(--alto-campo); padding: var(--esp-2) var(--esp-4);
+#gastos-form > label:nth-child(n + 5) {
+  margin-block-start: var(--esp-3);
 }
 
-/* Posición y tipografía exclusivas del botón de alta. */
 #gastos-form button {
-  grid-column: 2; justify-self: start;
-  min-height: var(--alto-campo);
-  letter-spacing: var(--letras-label); text-transform: uppercase;
-}
-
-#gastos-form button:active:not(:disabled) {
-  background: #830000;
-  transform: translateY(var(--presion));
+  justify-self: end;
+  min-width: 11rem;
+  margin-block-start: var(--esp-4);
 }
 
 #gastos-form :is(input, select, button):disabled {
-  opacity: var(--opacidad-inactiva); cursor: not-allowed;
+  opacity: 0.55; cursor: not-allowed;
 }
 
-/* Mensaje de error: el JS controla la clase .error. */
+/* Error compartido: el JS muestra el mensaje mediante .error. */
 #mensaje-error {
-  display: none; grid-column: 1 / -1;
+  display: none;
   padding: var(--esp-3) var(--esp-4);
-  background: var(--fondo); color: var(--blanco);
-  border: var(--linea-fina) solid var(--borde);
-  border-left: var(--linea-gruesa) solid var(--rojo-vivo);
+  background: rgb(189 36 41 / 10%);
+  border: 1px solid rgb(239 69 72 / 32%);
+  border-left: 3px solid var(--rojo-vivo);
   border-radius: var(--radio);
-  font-size: var(--letra-sm); line-height: var(--linea);
+  color: var(--blanco);
+  font-size: var(--letra-sm);
 }
 
 #mensaje-error.error { display: block; animation: aparecer var(--suave) var(--curva) both; }
+
+/* Edición: pantalla enfocada, con el mismo lenguaje que el alta. */
+#form-editar { display: none; }
+html:has(#form-editar.editando) { overflow: hidden; }
+
+#form-editar.editando {
+  position: fixed; inset: 0;
+  z-index: calc(var(--capa-header) + 1);
+  display: grid;
+  grid-template-columns: minmax(8rem, 11rem) minmax(0, 32rem);
+  justify-content: center;
+  align-content: safe center;
+  align-items: center;
+  gap: var(--esp-3) var(--esp-5);
+  padding: var(--esp-7) var(--aire-x) max(var(--esp-7), env(safe-area-inset-bottom));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--panel);
+  color: var(--blanco);
+}
+
+#form-editar h2 {
+  grid-column: 1 / -1;
+  margin-block-end: var(--esp-5);
+  padding-block-end: var(--esp-5);
+  border-bottom: 1px solid var(--borde);
+  font: 800 clamp(2.25rem, 5vw, 3.75rem)/1.05 var(--titulos);
+  letter-spacing: -0.06em;
+}
+
+#form-editar h2::before {
+  content: ""; display: inline-block;
+  width: 3px; height: 0.75em;
+  margin-inline-end: var(--esp-4);
+  border-radius: 2px;
+  background: var(--rojo-vivo);
+}
+
+#form-editar > label { color: var(--texto); font-size: var(--letra-sm); font-weight: 600; }
+#form-editar > button[type="submit"] { grid-column: 2; justify-self: end; margin-block-start: var(--esp-4); }
+#form-editar > #mensaje-error { grid-column: 1 / -1; }

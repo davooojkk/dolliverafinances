@@ -2,6 +2,7 @@ import { eliminarGastos, editarGastos, obtenerGastos } from "./gastos.js";
 import { renderGastos } from "../render.js";
 import { obtenerDatosFormulario } from "../formulario/formUtils.js";
 import { actualizarTotalMonedas } from "../dashboard/dashboardEvents.js";
+import { actualizarGrafico } from "../dashboard/renderDashboards.js";
 
 export function initEventosGastos() {
   const gastosList = document.querySelector(".gastos-list");
@@ -21,6 +22,7 @@ function manejarEliminacion(id) {
   if (eliminado) {
     renderGastos(obtenerGastos());
     actualizarTotalMonedas();
+    actualizarGrafico();
   } else {
     window.alert("No hemos conseguido eliminar el gasto!");
   }
@@ -54,6 +56,7 @@ export function initSubmitEdicion() {
     if(edicion) {
         renderGastos(obtenerGastos());
         actualizarTotalMonedas();
+        actualizarGrafico();
         formularioEditar.classList.remove('editando')
     } else {
         window.alert('Los cambios no fueron finalizados! Intente nuevamente...')

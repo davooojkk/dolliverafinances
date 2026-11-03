@@ -1,170 +1,105 @@
-/* Lista de gastos: estado vacío y tarjetas generadas por JavaScript. */
-.gastos-list { min-width: 0; }
+/* Registro continuo: filas claras en vez de tarjetas repetidas. */
+.gastos-list {
+  min-width: 0;
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-panel);
+}
 
 /* Fallback visual, no reemplaza un mensaje semántico en el HTML. */
 .gastos-list:not(:has(> *))::before {
   content: var(--mensaje-vacio); display: block;
-  padding: var(--esp-6) var(--esp-5);
+  padding: var(--esp-7) var(--esp-5);
   color: var(--texto-suave);
-  border: var(--linea-fina) dashed var(--borde);
-  border-radius: var(--radio);
-  font-size: var(--letra-sm); text-align: center;
+  font-size: var(--letra-sm);
+  text-align: center;
 }
 
-/* Estructura DOM: descripción, categoría, monto, moneda, fecha y acciones. */
+/* El DOM entrega moneda antes que monto: cada dato ocupa su área correcta. */
 .gastos-list > div {
   display: grid;
   grid-template-columns: minmax(0, 1fr) max-content max-content;
   grid-template-areas: "desc monto fecha" "cat moneda fecha" "eliminar . editar";
   align-items: center; gap: var(--esp-2) var(--esp-5);
   min-width: 0;
-  padding: var(--esp-4) var(--esp-3);
-  border-bottom: var(--linea-fina) solid var(--borde);
-  border-radius: var(--radio);
-  transition: background-color var(--suave) var(--curva),
-    border-color var(--suave) var(--curva);
-  animation: aparecer var(--suave) var(--curva) both;
+  padding: var(--esp-5);
+  border-bottom: 1px solid var(--borde);
+  transition: background-color var(--rapido) var(--curva);
 }
 
-.gastos-list > div:first-child { border-top: var(--linea-fina) solid var(--borde); }
+.gastos-list > div:last-child { border-bottom: 0; }
 
-/* Columnas: descripción, categoría, monto, moneda, fecha y acciones. */
+/* Texto y cifras en escalas distintas para lectura rápida. */
 .gastos-list > div > p:nth-child(1) {
   grid-area: desc; min-width: 0;
   color: var(--blanco);
-  font: 600 var(--letra-sub) / var(--linea-titulo) var(--titulos);
-  letter-spacing: var(--letras-titulo); overflow-wrap: anywhere;
+  font: 700 var(--letra-sub)/1.3 var(--titulos);
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
 }
 
 .gastos-list > div > p:nth-child(2) {
   grid-area: cat; justify-self: start; min-width: 0;
   color: var(--texto-suave);
-  font-size: var(--letra-xs); font-weight: 500;
-  letter-spacing: var(--letras-micro);
-  text-transform: uppercase; overflow-wrap: anywhere;
+  font: 500 var(--letra-xs)/1.4 var(--mono);
+  overflow-wrap: anywhere;
 }
 
 .gastos-list > div > span:nth-child(3) {
-  grid-area: monto; justify-self: end; min-width: 0;
-  color: var(--rojo-vivo);
-  font-size: var(--letra-monto); font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: var(--letras-monto); white-space: nowrap;
+  grid-area: moneda; justify-self: end;
+  color: var(--texto-suave);
+  font: 600 var(--letra-xs)/1.4 var(--mono);
+  text-transform: uppercase;
 }
 
 .gastos-list > div > span:nth-child(4) {
-  grid-area: moneda; justify-self: end;
-  color: var(--texto-suave);
-  font-size: var(--letra-xs); letter-spacing: var(--letras-micro);
-  text-transform: uppercase; white-space: nowrap;
+  grid-area: monto; justify-self: end; min-width: 0;
+  color: var(--rojo-vivo);
+  font: 600 var(--letra-monto)/1.2 var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  white-space: nowrap;
 }
 
 .gastos-list > div > span:nth-child(5) {
   grid-area: fecha; justify-self: end;
   color: var(--texto-suave);
-  font-size: var(--letra-sm); font-variant-numeric: tabular-nums;
-  letter-spacing: var(--letras-label);
-  text-align: right; white-space: nowrap;
+  font: 500 var(--letra-xs)/1.5 var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
 }
 
 .gastos-list > div > button {
-  min-height: 2.25rem; margin-block-start: var(--esp-1);
-  padding: var(--esp-2) var(--esp-4);
-  border-radius: var(--radio);
-  font-size: var(--letra-sm); font-weight: 600;
-  line-height: 1.2;
+  min-height: 2rem;
+  margin-block-start: var(--esp-2);
+  padding: var(--esp-1) var(--esp-3);
+  border-radius: 0.5rem;
+  font: 600 var(--letra-sm)/1.3 var(--titulos);
   cursor: pointer;
-  transition: background-color var(--rapido) var(--curva),
-    color var(--rapido) var(--curva), border-color var(--rapido) var(--curva);
+  transition: background-color var(--rapido), color var(--rapido), border-color var(--rapido);
 }
 
 .gastos-list > div > .eliminar {
   grid-area: eliminar; justify-self: start;
-  background: var(--fondo); color: var(--rojo-vivo);
-  border: var(--linea-fina) solid var(--rojo);
+  background: transparent; color: var(--rojo-vivo);
+  border: 1px solid rgb(239 69 72 / 45%);
 }
 
 .gastos-list > div > .editar {
   grid-area: editar; justify-self: end;
-  background: var(--panel); color: var(--blanco);
-  border: var(--linea-fina) solid var(--borde);
+  background: var(--panel-alto); color: var(--texto);
+  border: 1px solid var(--borde);
 }
 
-/* Formulario de edición: oculto hasta que JS agrega .editando. */
-#form-editar { display: none; }
-html:has(#form-editar.editando) { overflow: hidden; }
-
-#form-editar.editando {
-  position: fixed; inset: 0;
-  z-index: calc(var(--capa-header) + 1);
-  display: grid;
-  grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
-  align-content: start; align-items: center;
-  gap: var(--esp-4) var(--esp-6);
-  width: 100%; height: 100vh; height: 100dvh;
-  margin: 0;
-  padding: clamp(var(--esp-6), 12vh, var(--esp-8))
-    max(var(--aire-x), calc((100vw - var(--ancho)) / 2))
-    max(var(--esp-7), env(safe-area-inset-bottom));
-  overflow-y: auto; overscroll-behavior: contain;
-  background: var(--fondo); color: var(--blanco);
-  animation: aparecer var(--suave) var(--curva) both;
-}
-
-#form-editar h2 {
-  display: flex; align-items: center;
-  gap: var(--esp-4);
-  grid-column: 1 / -1;
-  margin: 0 0 var(--esp-5); padding-block-end: var(--esp-5);
-  border-bottom: var(--linea-fina) solid var(--borde);
-  font: 800 clamp(2.25rem, 5vw, 3.5rem) / var(--linea-titulo) var(--titulos);
-  letter-spacing: var(--letras-titulo);
-}
-
-#form-editar h2::before {
-  content: ""; flex: none;
-  width: var(--linea-gruesa); height: var(--alto-marca);
-  background: var(--rojo-vivo);
-}
-
-#form-editar > label {
-  color: var(--texto);
-  font-size: var(--letra-sm); font-weight: 500;
-  line-height: 1.4;
-}
-
-#form-editar > :is(input, select) {
-  min-height: calc(var(--alto-campo) + var(--esp-2));
-  padding: var(--esp-3) var(--esp-4);
-}
-
-#form-editar > button[type="submit"] {
-  grid-column: 2; justify-self: end;
-  min-height: calc(var(--alto-campo) + var(--esp-2));
-  margin-block-start: var(--esp-4);
-  transition: background-color var(--rapido) var(--curva), color var(--rapido) var(--curva);
-}
-
-#form-editar > button[type="submit"]:active { background: #830000; }
-
-#form-editar > #mensaje-error { grid-column: 1 / -1; margin: 0; }
-
-/* Estados hover del encabezado y cada gasto. */
+/* Hover solo con puntero; no distraer mientras se navega con teclado. */
 @media (hover: hover) {
-  .header-list li a:hover {
-    color: var(--blanco); text-decoration-color: var(--rojo-vivo);
-  }
-
-  .gastos-list > div:hover {
-    background: var(--fondo); border-bottom-color: var(--borde-hover);
-  }
-
+  .gastos-list > div:hover { background: var(--panel-alto); }
   .gastos-list > div > .eliminar:hover {
     background: var(--rojo); color: var(--blanco);
   }
-
   .gastos-list > div > .editar:hover {
-    background: var(--blanco); color: var(--negro);
-    border-color: var(--blanco);
+    border-color: var(--borde-hover); color: var(--blanco);
   }
 }

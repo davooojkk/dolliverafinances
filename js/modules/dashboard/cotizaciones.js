@@ -19,8 +19,8 @@ async function cotizacionDolar() {
     }
 }
 
-export function iniciarCotizaciones() {
-    cotizacionDolar();
+export async function iniciarCotizaciones() {
+    await cotizacionDolar();
     setInterval(cotizacionDolar, 300  * 1000)
 };
 

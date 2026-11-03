@@ -1,14 +1,16 @@
-/* Cabecera fija y navegación. */
+/* Marca y navegación: una línea roja identifica la aplicación. */
 .header {
   position: sticky; top: 0;
   z-index: var(--capa-header);
-  background: var(--fondo);
-  border-bottom: var(--linea-fina) solid var(--borde);
+  background: rgb(13 16 18 / 94%);
+  border-top: 2px solid var(--rojo);
+  border-bottom: 1px solid var(--borde);
+  backdrop-filter: blur(16px);
 }
 
 .header-list {
   display: flex; flex-wrap: wrap; align-items: center;
-  gap: var(--esp-2) var(--esp-5);
+  gap: var(--esp-2) var(--esp-6);
   max-width: var(--ancho);
   margin-inline: auto;
   padding: var(--esp-3) var(--aire-x);
@@ -16,41 +18,38 @@
 
 .header-list li:first-child {
   display: flex; flex-wrap: wrap; align-items: baseline;
-  gap: var(--esp-2) var(--esp-3);
-  min-width: 0;
-  margin-inline-end: auto;
+  gap: var(--esp-2);
+  min-width: 0; margin-inline-end: auto;
 }
 
 .header-list li:first-child p {
-  color: var(--blanco);
-  font: 900 var(--letra-marca) / var(--linea-titulo) var(--titulos);
-  letter-spacing: var(--letras-titulo);
-  text-transform: lowercase;
+  font: 900 var(--letra-marca)/1 var(--titulos);
+  letter-spacing: -0.065em;
 }
 
 .header-list li:first-child span {
   color: var(--rojo-vivo);
-  font-size: var(--letra-xs); font-weight: 500;
-  letter-spacing: var(--letras-micro);
+  font: 600 var(--letra-xs)/1 var(--mono);
+  letter-spacing: 0.055em;
   text-transform: uppercase;
 }
 
 .header-list li a {
   display: inline-flex; align-items: center;
-  min-height: var(--alto-campo);
-  color: var(--texto-suave);
-  font-size: var(--letra-sm); font-weight: 500;
-  letter-spacing: var(--letras-label);
-  text-transform: uppercase;
-  text-decoration: underline;
-  text-decoration-color: transparent;
-  text-underline-offset: var(--esp-1);
-  transition: color var(--rapido) var(--curva),
-    text-decoration-color var(--rapido) var(--curva);
+  min-height: 2.5rem;
+  padding: 0 var(--esp-3);
+  border: 1px solid var(--borde);
+  border-radius: 0.5rem;
+  color: var(--texto);
+  font: 500 var(--letra-sm)/1 var(--titulos);
+  transition: border-color var(--rapido), color var(--rapido);
 }
 
 .header-list li:last-child {
-  color: var(--texto);
-  font-size: var(--letra-xs); letter-spacing: var(--letras-label);
-  text-transform: uppercase;
+  color: var(--texto-suave);
+  font: 500 var(--letra-xs)/1.4 var(--mono);
+}
+
+@media (hover: hover) {
+  .header-list li a:hover { border-color: var(--rojo); color: var(--blanco); }
 }

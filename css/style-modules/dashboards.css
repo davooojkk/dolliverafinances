@@ -1,97 +1,64 @@
-
-/* Contenedor de dashboards */
+/* Resumen persistente, sin cajas vacías ni adornos ajenos a los datos. */
 .dashboards {
-  margin-top: var(--aire-y);
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
+  position: sticky; top: 6.5rem;
+  display: grid; gap: var(--esp-4);
   min-width: 0;
+  margin-block-start: var(--aire-y);
 }
 
-/* Tarjeta */
-#gastos-moneda {
-  box-sizing: border-box;
-  width: 100%;
-  padding: 16px;
+:is(#gastos-moneda, #grafico-gastos, #cotizacion-oficial:not(:empty)) {
+  min-width: 0;
   background: var(--panel);
   border: 1px solid var(--borde);
-  border-radius: 6px;
+  border-radius: var(--radio-panel);
 }
 
-/* Título */
+/* Conversión: selector sobrio y cifra protagonista. */
+#gastos-moneda { padding: var(--esp-5); }
+
 #gastos-moneda h2 {
-  margin: 0 0 16px;
-  padding-left: 8px;
-  border-left: 3px solid var(--rojo-vivo);
-  color: var(--blanco);
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1.4;
+  padding-block-end: var(--esp-4);
+  border-bottom: 1px solid var(--borde);
+  color: var(--texto);
+  font: 600 var(--letra-sm)/1.4 var(--titulos);
 }
 
-/* Formulario */
-#formulario-gastos-moneda {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+#formulario-gastos-moneda { margin-block-start: var(--esp-4); }
+
+#formulario-gastos-moneda #monedas {
+  min-height: 2.75rem;
+  font-size: var(--letra-sm);
 }
 
-/* Selector de moneda */
-#monedas {
-  box-sizing: border-box;
-  width: 100%;
-  min-width: 0;
-  padding: 10px 8px;
-  background: var(--fondo);
-  color: var(--blanco);
-  border: 1px solid var(--borde);
-  border-radius: 4px;
-  font-size: 0.75rem;
-  cursor: pointer;
-}
-
-#monedas:focus {
-  border-color: var(--rojo-vivo);
-  outline: none;
-}
-
-@media (hover: hover) {
-  #formulario-gastos-moneda input[type="button"]:hover {
-    background: var(--rojo-vivo);
-  }
-}
-
-#formulario-gastos-moneda input[type="button"]:focus-visible {
-  outline: 2px solid var(--blanco);
-  outline-offset: 3px;
-}
-
-/* Resultado */
 .datos-gastos-moneda {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-  margin-top: 16px;
-  padding-top: 16px;
+  display: grid; gap: var(--esp-2);
+  margin-block-start: var(--esp-5);
+  padding-block-start: var(--esp-5);
   border-top: 1px solid var(--borde);
-  text-align: center;
 }
 
-/* Total calculado */
 #total-moneda {
-  color: var(--rojo-vivo);
-  font-size: 1.8rem;
-  font-weight: 800;
+  color: var(--blanco);
+  font: 700 clamp(1.9rem, 3vw, 2.65rem)/1.1 var(--mono);
   font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
   overflow-wrap: anywhere;
 }
 
-/* Moneda seleccionada */
 #moneda-seleccionada {
-  margin: 0;
-  color: var(--texto-suave);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 1px;
+  color: var(--rojo-vivo);
+  font: 600 var(--letra-sm)/1.3 var(--mono);
+  letter-spacing: 0.04em;
   text-transform: uppercase;
 }
+
+/* El gráfico conserva el canvas y sus dimensiones adaptativas. */
+#grafico-gastos {
+  position: relative;
+  height: 23rem;
+  padding: var(--esp-4);
+}
+
+#grafico-categorias { display: block; max-width: 100%; margin-inline: auto; }
+#grafico-gastos[hidden] { display: none; }
+#cotizacion-oficial:empty { display: none; }

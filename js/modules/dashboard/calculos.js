@@ -42,14 +42,6 @@ function calcularTotalUSD(gastos, cotizaciones) {
 }
 
 function calcularGastosCategorias(gastos, cotizaciones) {
-    gastos.forEach(gasto => {
-        const montoUSD = convertirUSD(gasto, cotizaciones);
-        if(objetoGastos[gasto.categoria] === undefined) { objetoGastos[gasto.categoria] = 0}
-        if(!(montoUSD === null)) { objetoGastos[gasto.categoria] += montoUSD; }
-    });
-}
-
-function calcularGastosCategoriasFor(gastos, cotizaciones) {
     const objetoGastos = {};
     for (const gasto of gastos) {
         const montoUSD = convertirUSD(gasto, cotizaciones);
@@ -72,6 +64,18 @@ function calcularPorcentajesCategorias(gastosCategorias, totalUSD) {
         porcentajes[categoria] = (monto / totalUSD) * 100;
 
 
-        return porcentajes;
     }
+
+    return porcentajes;
+
 }
+
+export function prepararDatosGrafico(gastos, cotizaciones) {
+
+    const totalUSD = calcularTotalUSD(gastos, cotizaciones);
+    const gastosCategorias = calcularGastosCategorias(gastos, cotizaciones);
+    const porcentajesCategorias = calcularPorcentajesCategorias(gastosCategorias, totalUSD);
+
+    return porcentajesCategorias;
+
+};

@@ -1,69 +1,67 @@
-/* Hasta 45rem: formularios en una columna, con botones de ancho completo. */
+/* Tablet: abandonar el lateral antes de que el formulario se comprima. */
+@media (max-width: 58rem) {
+  .app-layout { grid-template-columns: minmax(0, 1fr); }
+  .dashboards {
+    position: static;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .dashboards:has(#grafico-gastos[hidden]) { grid-template-columns: minmax(0, 1fr); }
+  #grafico-gastos { height: 19rem; }
+  .gastos-list-block { padding-block-start: var(--separacion); }
+}
+
+/* Una columna: mismas áreas, sin cambios en el orden funcional del HTML. */
 @media (max-width: 45rem) {
-  #form-editar.editando {
+  #gastos-form {
     grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "ld" "d" "lm" "m" "la" "a" "lc" "c"
+      "lf" "f" "action" "error";
+    row-gap: var(--esp-2);
+  }
+
+  #gastos-form > label:not(:first-child) { margin-block-start: var(--esp-3); }
+  #gastos-form button { justify-self: stretch; margin-block-start: var(--esp-3); }
+
+  #form-editar.editando {
+    grid-template-columns: minmax(0, 32rem);
     row-gap: var(--esp-2);
     padding-block-start: var(--esp-6);
   }
-
   #form-editar h2 { margin-block-end: var(--esp-3); }
-  #form-editar > label { margin-block-start: var(--esp-3); }
-  #form-editar > button[type="submit"] {
-    grid-column: 1; justify-self: stretch;
-    margin-block-start: var(--esp-5);
-  }
-
-  #gastos-form {
-    grid-template-columns: minmax(0, 1fr);
-    row-gap: var(--esp-2);
-  }
-
-  #gastos-form label {
-    text-align: left; margin-block-start: var(--esp-3);
-  }
-
-  #gastos-form label:first-child { margin-block-start: 0; }
-
-  #gastos-form button {
-    grid-column: 1; justify-self: stretch;
-    margin-block-start: var(--esp-2);
-  }
+  #form-editar > label { margin-block-start: var(--esp-2); }
+  #form-editar > button[type="submit"] { grid-column: 1; justify-self: stretch; }
 }
 
-/* Hasta 35rem: cabecera apilada y tarjetas de dos columnas. */
+/* Teléfonos: resumen compacto y filas del registro en dos columnas. */
 @media (max-width: 35rem) {
-  .header-list { column-gap: var(--esp-2); }
-
-  .header-list li:first-child {
-    flex-direction: column; align-items: flex-start;
-    row-gap: var(--esp-1);
-  }
+  .dashboards { grid-template-columns: minmax(0, 1fr); }
+  #gastos-moneda { padding: var(--esp-4); }
+  #grafico-gastos { height: 21rem; }
+  .header-list { gap: var(--esp-2) var(--esp-3); }
+  .header-list li:last-child { width: 100%; }
 
   .gastos-list > div {
     grid-template-columns: minmax(0, 1fr) max-content;
     grid-template-areas: "desc monto" "cat moneda" "fecha fecha" "eliminar editar";
-    column-gap: var(--esp-3); padding-inline: var(--esp-2);
+    column-gap: var(--esp-3);
+    padding: var(--esp-4);
   }
-
-  .gastos-list > div > span:nth-child(5) {
-    justify-self: start; text-align: left;
-  }
-
-  .gastos-list:not(:has(> *))::before { padding: var(--esp-5) var(--esp-4); }
+  .gastos-list > div > span:nth-child(5) { justify-self: start; text-align: left; }
 }
 
-/* Hasta 30rem: el monto baja para evitar desbordes. */
 @media (max-width: 30rem) {
   .gastos-list > div {
     grid-template-areas: "desc desc" "cat fecha" "monto moneda" "eliminar editar";
   }
-
-  .gastos-list > div > span:nth-child(3) {
-    justify-self: start; overflow-wrap: anywhere;
+  .gastos-list > div > span:nth-child(4) {
+    justify-self: start;
+    overflow-wrap: anywhere;
     white-space: normal;
   }
+  .gastos-list > div > span:nth-child(5) { justify-self: end; text-align: right; }
+}
 
-  .gastos-list > div > span:nth-child(5) {
-    justify-self: end; text-align: right;
-  }
+@media (max-height: 48rem) {
+  .dashboards { position: static; }
 }
