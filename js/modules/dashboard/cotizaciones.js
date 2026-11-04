@@ -8,8 +8,9 @@ async function cotizacionDolar() {
         }
 
         const cotizacion = await apiResultado.json();
+        const fecha = new Date()
 
-        cotizacionesActuales = {BRL: cotizacion.rates.BRL, UYU: cotizacion.rates.UYU};
+        cotizacionesActuales = {BRL: cotizacion.rates.BRL.toFixed(1), UYU: cotizacion.rates.UYU.toFixed(1), fecha};
         return cotizacionesActuales;
     }
 
@@ -19,12 +20,18 @@ async function cotizacionDolar() {
     }
 }
 
-export async function iniciarCotizaciones(actualizarGrafico) {
-    await cotizacionDolar()
-    await actualizarGrafico()
+export async function iniciarCotizaciones(actualizarGrafico, renderCotizaciones) {
+    const cotizaciones = await cotizacionDolar();
+    await actualizarGrafico();
+    if (cotizaciones !== null) {
+    renderCotizaciones(cotizaciones);
+    }
     setInterval(async () => { 
-        await cotizacionDolar(); 
+        const cotizaciones = await cotizacionDolar();
         await actualizarGrafico();
+        if (cotizaciones !== null) {
+             renderCotizaciones(cotizaciones);
+            }
     }, 300 * 1000);
 };
 

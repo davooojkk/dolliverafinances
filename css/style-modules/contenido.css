@@ -1,7 +1,7 @@
 /* Dos ritmos: resumen lateral y registro principal. */
 .app-layout {
   display: grid;
-  grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr);
+  grid-template-columns: 1fr; 
   align-items: start;
   gap: clamp(2rem, 4vw, 4.5rem);
   max-width: var(--ancho);

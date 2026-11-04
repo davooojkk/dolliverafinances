@@ -18,8 +18,16 @@
       </nav>
     </header>
 
+    <section class="menu-vistas">
+      <ul>
+        <li><button type="button" data-vista="gastos">gastos</button></li>
+        <li><button type="button" data-vista="dashboards">dashboards</button></li>
+        <li><button type="button" data-vista="ajustes">ajustes</button></li>
+      </ul>
+    </section>
+
     <main class="app-layout">
-      <section class="dashboards">
+      <section class="dashboards" id="vista-dashboards" aria-label="dashboards">
       <aside id="gastos-moneda">
         <div>
           <h2>Gastos por moneda</h2>
@@ -43,7 +51,7 @@
       </aside>
       <aside id="cotizacion-oficial"></aside>
     </section>
-    <section class="gastos-list-block" aria-label="Lista completa de gastos">
+    <section class="gastos-list-block" id="vista-gastos" aria-label="Lista completa de gastos">
       <div class="label-gastos-list">
         <p>Todos los gastos</p>
       </div>
@@ -89,6 +97,7 @@
       <div class="gastos-list">
       </div>
     </section>
+    <section class="ajustes" id="vista-ajustes" aria-label="ajustes"></section>
     </main>
 
     <form id="form-editar">

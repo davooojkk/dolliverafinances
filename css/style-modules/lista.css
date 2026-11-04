@@ -1,4 +1,8 @@
 /* Registro continuo: filas claras en vez de tarjetas repetidas. */
+.gastos-list-block { display: none;}
+
+.gastos-list-block.visible { display: flex ;}
+
 .gastos-list {
   min-width: 0;
   overflow: hidden;

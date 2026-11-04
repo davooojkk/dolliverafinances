@@ -37,7 +37,7 @@ export function renderGraficoCategorias(porcentajes) {
         'gasto fijo': '#59b4bb',
         insumos: '#7795a3',
         'salud-cuidado': '#688773',
-        hogar: 'b4a6b5',
+        hogar: '#b4a6b5',
         mascota: '#d88a65',
         transporte: '#8c66ab'
     };
@@ -70,7 +70,9 @@ export function renderGraficoCategorias(porcentajes) {
 };
 
 export function actualizarGrafico() {
-    const porcentajes = prepararDatosGrafico(
+    const dashboard = document.querySelector('#vista-dashboards');
+    if(dashboard.classList.contains('visible')) {
+        const porcentajes = prepararDatosGrafico(
         obtenerGastos(),
         obtenerCotizaciones()
     );
@@ -78,6 +80,20 @@ export function actualizarGrafico() {
     if (porcentajes === null) return;
 
     renderGraficoCategorias(porcentajes);
+    }
 }
 
+export function renderCotizaciones(cotizacionesActuales) {
+    const cotizacionSection = document.querySelector('#cotizacion-oficial');
+
+    const cotizacionPesos = document.createElement('h2');
+    const cotizacionReales = document.createElement('h2')
+    const cotizacionFecha = document.createElement('span')
+
+    cotizacionPesos.innerText = cotizacionesActuales.UYU;
+    cotizacionReales.innerText = cotizacionesActuales.BRL;
+    console.log(cotizacionesActuales);
+    cotizacionFecha.innerText = cotizacionesActuales.fecha.toLocaleTimeString('es-UY');
+    cotizacionSection.replaceChildren(cotizacionPesos, cotizacionReales, cotizacionFecha);
+}
 

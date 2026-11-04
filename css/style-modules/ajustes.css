@@ -1,0 +1,75 @@
+.menu-vistas {
+  max-width: var(--ancho);
+  margin: var(--esp-5) auto 0;
+  padding-inline: var(--aire-x);
+}
+
+.menu-vistas ul {
+  display: flex;
+  align-items: stretch;
+  gap: clamp(var(--esp-4), 3vw, var(--esp-6));
+  overflow-x: auto;
+  box-shadow: inset 0 -1px var(--borde);
+}
+
+.menu-vistas li { flex: none; }
+
+.menu-vistas button {
+  display: flex;
+  align-items: center;
+  gap: var(--esp-2);
+  min-height: 2.75rem;
+  padding: var(--esp-2) var(--esp-1) var(--esp-3);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--texto-suave);
+  font: 600 var(--letra-boton)/1.3 var(--titulos);
+  cursor: pointer;
+  transition: color var(--rapido) var(--curva), border-color var(--rapido) var(--curva);
+}
+
+.menu-vistas button[data-vista="gastos"] { --icono: url("../../icons/wallet.svg"); }
+.menu-vistas button[data-vista="dashboards"] { --icono: url("../../icons/chart-no-axes-combined.svg"); }
+.menu-vistas button[data-vista="ajustes"] { --icono: url("../../icons/sliders-horizontal.svg"); }
+
+.menu-vistas button::before {
+  content: "";
+  flex: none;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: currentColor;
+  -webkit-mask: var(--icono) center / contain no-repeat;
+  mask: var(--icono) center / contain no-repeat;
+}
+
+.menu-vistas button:focus-visible { outline-offset: -3px; }
+
+@media (hover: hover) {
+  .menu-vistas button:hover { color: var(--blanco); }
+}
+
+@media (max-width: 35rem) {
+  .menu-vistas { margin-block-start: var(--esp-3); }
+  .menu-vistas ul { gap: var(--esp-2); }
+  .menu-vistas button { gap: var(--esp-1); min-height: 3rem; }
+}
+
+/* La vista marcada por el JS determina la pestaña activa, sin duplicar estado. */
+:is(
+  body:has(#vista-gastos.visible) .menu-vistas button[data-vista="gastos"],
+  body:has(#vista-dashboards.visible) .menu-vistas button[data-vista="dashboards"],
+  body:has(#vista-ajustes.visible) .menu-vistas button[data-vista="ajustes"],
+  body:not(:has(.app-layout > .visible)) .menu-vistas button[data-vista="gastos"]
+) {
+  border-bottom-color: var(--rojo-vivo);
+  color: var(--blanco);
+}
+
+/* Antes de elegir una vista, el registro de gastos es la pantalla inicial. */
+body:not(:has(.app-layout > .visible)) .gastos-list-block { display: flex; }
+
+.ajustes { display: none; }
+
+.ajustes.visible { display: block; }

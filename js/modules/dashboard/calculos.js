@@ -66,7 +66,9 @@ function calcularPorcentajesCategorias(gastosCategorias, totalUSD) {
 
     }
 
-    return porcentajes;
+    const porcentajesNormalizados = porcentajes.map((p) => p.toFixed(1));
+
+    return porcentajesNormalizados;
 
 }
 
