@@ -1,14 +1,23 @@
 /* Resumen persistente, sin cajas vacías ni adornos ajenos a los datos. */
 .dashboards {
-  display: none; /* display: grid; gap: var(--esp-4); config vieja */
+  display: none;
   position: sticky; top: 6.5rem;
   min-width: 0;
   margin-block-start: var(--aire-y);
 }
 
-.dashboards.visible { display: grid; gap: var(--esp-4); }
+.dashboards.visible {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-areas: "cotizaciones moneda" "grafico totales";
+  gap: var(--esp-4);
+}
 
-:is(#gastos-moneda, #grafico-gastos, #cotizacion-oficial:not(:empty)) {
+.dashboards.visible:not(:has(#cotizacion-oficial > h2)) {
+  grid-template-areas: "moneda moneda" "grafico totales";
+}
+
+:is(#gastos-moneda, #grafico-gastos, #cotizacion-oficial) {
   min-width: 0;
   background: var(--panel);
   border: 1px solid var(--borde);
@@ -16,7 +25,7 @@
 }
 
 /* Conversión: selector sobrio y cifra protagonista. */
-#gastos-moneda { padding: var(--esp-5); }
+#gastos-moneda { grid-area: moneda; padding: var(--esp-5); }
 
 #gastos-moneda h2 {
   padding-block-end: var(--esp-4);
@@ -56,6 +65,7 @@
 
 /* El gráfico conserva el canvas y sus dimensiones adaptativas. */
 #grafico-gastos {
+  grid-area: grafico;
   position: relative;
   height: 23rem;
   padding: var(--esp-4);
@@ -87,89 +97,3 @@
 
 #grafico-gastos:has(p:not([hidden])) canvas { visibility: hidden; }
 #grafico-gastos[hidden] { display: none; }
-#cotizacion-oficial:empty { display: none; }
-
-/* Pizarra de cambios: las cifras, no los adornos, llevan el peso visual. */
-#cotizacion-oficial:not(:empty) {
-  display: grid;
-  grid-column: 1 / -1;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--esp-5) 0;
-  padding: var(--esp-5);
-}
-
-#cotizacion-oficial::before {
-  content: "1 USD equivale a";
-  grid-column: 1 / -1;
-  padding: 0 0 var(--esp-4) var(--esp-3);
-  border-bottom: 1px solid var(--borde);
-  border-left: 3px solid var(--rojo-vivo);
-  color: var(--texto);
-  font: 600 var(--letra-sm)/1.4 var(--titulos);
-}
-
-#cotizacion-oficial > h2 {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: start;
-  align-items: baseline;
-  gap: var(--esp-2);
-  min-width: 0;
-  color: var(--blanco);
-  font: 600 clamp(1.5rem, 3vw, 2.375rem)/1.2 var(--mono);
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.045em;
-  overflow-wrap: anywhere;
-}
-
-#cotizacion-oficial > h2::before {
-  flex-basis: 100%;
-  color: var(--texto);
-  font: 600 var(--letra-sm)/1.4 var(--titulos);
-  letter-spacing: normal;
-}
-
-#cotizacion-oficial > h2:first-of-type::before { content: "Pesos uruguayos"; }
-#cotizacion-oficial > h2:nth-of-type(2)::before { content: "Reales brasileños"; }
-
-#cotizacion-oficial > h2::after {
-  color: var(--rojo-vivo);
-  font: 600 var(--letra-xs)/1.4 var(--mono);
-  letter-spacing: 0.04em;
-}
-
-#cotizacion-oficial > h2:first-of-type::after { content: "UYU"; }
-#cotizacion-oficial > h2:nth-of-type(2)::after { content: "BRL"; }
-
-#cotizacion-oficial > h2:nth-of-type(2) {
-  padding-inline-start: var(--esp-5);
-  border-inline-start: 1px solid var(--borde);
-}
-
-#cotizacion-oficial > span {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--esp-2);
-  grid-column: 1 / -1;
-  padding-block-start: var(--esp-4);
-  border-top: 1px solid var(--borde);
-  color: var(--texto-suave);
-  font: 500 var(--letra-xs)/1.4 var(--mono);
-  font-variant-numeric: tabular-nums;
-}
-
-#cotizacion-oficial > span::before { content: "Actualizado:"; }
-
-@media (max-width: 35rem) {
-  #cotizacion-oficial:not(:empty) {
-    grid-template-columns: minmax(0, 1fr);
-    gap: var(--esp-4);
-    padding: var(--esp-4);
-  }
-
-  #cotizacion-oficial > h2:nth-of-type(2) {
-    padding: var(--esp-4) 0 0;
-    border-inline-start: 0;
-    border-top: 1px solid var(--borde);
-  }
-}

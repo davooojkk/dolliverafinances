@@ -1,0 +1,85 @@
+/* Pizarra de cotizaciones: al lado del gasto por moneda. */
+#cotizacion-oficial { display: none; grid-area: cotizaciones; }
+
+#cotizacion-oficial:has(> h2) {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--esp-5) 0;
+  padding: var(--esp-5);
+}
+
+#cotizacion-oficial::before {
+  content: "1 USD equivale a";
+  grid-column: 1 / -1;
+  padding: 0 0 var(--esp-4) var(--esp-3);
+  border-bottom: 1px solid var(--borde);
+  border-left: 3px solid var(--rojo-vivo);
+  color: var(--texto);
+  font: 600 var(--letra-sm)/1.4 var(--titulos);
+}
+
+#cotizacion-oficial > h2 {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: start;
+  align-items: baseline;
+  gap: var(--esp-2);
+  min-width: 0;
+  color: var(--blanco);
+  font: 600 clamp(1.5rem, 3vw, 2.375rem)/1.2 var(--mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+  overflow-wrap: anywhere;
+}
+
+#cotizacion-oficial > h2::before {
+  flex-basis: 100%;
+  color: var(--texto);
+  font: 600 var(--letra-sm)/1.4 var(--titulos);
+  letter-spacing: normal;
+}
+
+#cotizacion-oficial > h2:first-of-type::before { content: "Pesos uruguayos"; }
+#cotizacion-oficial > h2:nth-of-type(2)::before { content: "Reales brasileños"; }
+
+#cotizacion-oficial > h2::after {
+  color: var(--rojo-vivo);
+  font: 600 var(--letra-xs)/1.4 var(--mono);
+  letter-spacing: 0.04em;
+}
+
+#cotizacion-oficial > h2:first-of-type::after { content: "UYU"; }
+#cotizacion-oficial > h2:nth-of-type(2)::after { content: "BRL"; }
+
+#cotizacion-oficial > h2:nth-of-type(2) {
+  padding-inline-start: var(--esp-5);
+  border-inline-start: 1px solid var(--borde);
+}
+
+#cotizacion-oficial > span {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--esp-2);
+  grid-column: 1 / -1;
+  padding-block-start: var(--esp-4);
+  border-top: 1px solid var(--borde);
+  color: var(--texto-suave);
+  font: 500 var(--letra-xs)/1.4 var(--mono);
+  font-variant-numeric: tabular-nums;
+}
+
+#cotizacion-oficial > span::before { content: "Actualizado:"; }
+
+@media (max-width: 35rem) {
+  #cotizacion-oficial:has(> h2) {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--esp-4);
+    padding: var(--esp-4);
+  }
+
+  #cotizacion-oficial > h2:nth-of-type(2) {
+    padding: var(--esp-4) 0 0;
+    border-inline-start: 0;
+    border-top: 1px solid var(--borde);
+  }
+}

@@ -20,15 +20,17 @@ async function cotizacionDolar() {
     }
 }
 
-export async function iniciarCotizaciones(actualizarGrafico, renderCotizaciones) {
+export async function iniciarCotizaciones(actualizarGrafico, renderCotizaciones, calcularPeriodo) {
     const cotizaciones = await cotizacionDolar();
     await actualizarGrafico();
+    await calcularPeriodo();
     if (cotizaciones !== null) {
     renderCotizaciones(cotizaciones);
     }
     setInterval(async () => { 
         const cotizaciones = await cotizacionDolar();
         await actualizarGrafico();
+        await calcularPeriodo();
         if (cotizaciones !== null) {
              renderCotizaciones(cotizaciones);
             }

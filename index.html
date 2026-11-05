@@ -13,7 +13,7 @@
         <ul class="header-list">
           <li><p>dollivera</p> <span>finances</span></li>
           <li><a href="https://instagram.com/davotech.uy">instagram</a></li>
-          <li>Gracias por utilizar!</li>
+          <li><a href="https://linkedin.com/in/davyhenn">Davy Henn</a></li>
         </ul>
       </nav>
     </header>
@@ -44,12 +44,21 @@
           <p id="moneda-seleccionada"></p>
         </div>
       </aside>
+      <aside id="cotizacion-oficial">
+      </aside>
       <aside id="grafico-gastos">
-
         <canvas id="grafico-categorias"></canvas>
         <p>Todavía no hay gastos ingresados</p>
       </aside>
-      <aside id="cotizacion-oficial"></aside>
+      <aside id="gastos-totales">
+        <h2>Total de Gastos</h2>
+        <button type="button" data-periodo="1">1 mes</button>
+        <button type="button" data-periodo="3">3 meses</button>
+        <button type="button" data-periodo="6">6 meses</button>
+        <p id="total-gastos-usd"></p>
+      </aside>
+      
+    
     </section>
     <section class="gastos-list-block" id="vista-gastos" aria-label="Lista completa de gastos">
       <div class="label-gastos-list">

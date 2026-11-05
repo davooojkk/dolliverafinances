@@ -24,13 +24,6 @@ export function renderGraficoCategorias(porcentajes) {
     const labels = Object.keys(porcentajes);
     const data = Object.values(porcentajes);
 
-    if (instanciaGrafico !== null) {
-        instanciaGrafico.data.labels = labels;
-        instanciaGrafico.data.datasets[0].data = data;
-        instanciaGrafico.update();
-        return;
-    }
-
     const coloresCategorias = {
         consumo: '#a6aab2',
         fastfood: '#ef4548',
@@ -45,6 +38,13 @@ export function renderGraficoCategorias(porcentajes) {
     const backgroundColores = labels.map((label) => {
         return coloresCategorias[label]
     });
+
+    if (instanciaGrafico !== null) {
+        instanciaGrafico.data.labels = labels;
+        instanciaGrafico.data.datasets[0].data = data;
+        instanciaGrafico.update();
+        return;
+    }
 
     instanciaGrafico = new Chart(canvas, {
         type: 'pie',
@@ -92,8 +92,11 @@ export function renderCotizaciones(cotizacionesActuales) {
 
     cotizacionPesos.innerText = cotizacionesActuales.UYU;
     cotizacionReales.innerText = cotizacionesActuales.BRL;
-    console.log(cotizacionesActuales);
     cotizacionFecha.innerText = cotizacionesActuales.fecha.toLocaleTimeString('es-UY');
     cotizacionSection.replaceChildren(cotizacionPesos, cotizacionReales, cotizacionFecha);
 }
 
+export function renderTotalGastos(resultado) {
+    const totalHTML = document.querySelector('#total-gastos-usd');
+    totalHTML.innerText = `${resultado}`
+}

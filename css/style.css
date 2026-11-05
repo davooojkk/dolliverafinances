@@ -9,6 +9,8 @@
 @import "./style-modules/campos.css";
 @import "./style-modules/lista.css";
 @import "./style-modules/dashboards.css";
+@import "./style-modules/gastos-totales.css";
+@import "./style-modules/cotizaciones.css";
 @import "./style-modules/responsive.css";
 @import "./style-modules/movements.css";
 @import "./style-modules/ajustes.css";

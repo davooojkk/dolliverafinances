@@ -1,3 +1,5 @@
+import { obtenerCotizaciones } from "./cotizaciones.js";
+
 export function calcularTotalMonedas(gastos, moneda) {
     const totalMoneda = gastos.filter((gasto) => gasto.moneda === moneda)
     .reduce((acc, gasto) => {
@@ -39,7 +41,7 @@ function calcularTotalUSD(gastos, cotizaciones) {
     
     return totalUSD;
     
-}
+}  
 
 function calcularGastosCategorias(gastos, cotizaciones) {
     const objetoGastos = {};
@@ -61,14 +63,12 @@ function calcularPorcentajesCategorias(gastosCategorias, totalUSD) {
 
     for (const [categoria, monto] of Object.entries(gastosCategorias)) {
         
-        porcentajes[categoria] = (monto / totalUSD) * 100;
+        porcentajes[categoria] = Number(((monto / totalUSD) * 100).toFixed(1));
 
 
     }
 
-    const porcentajesNormalizados = porcentajes.map((p) => p.toFixed(1));
-
-    return porcentajesNormalizados;
+    return porcentajes;
 
 }
 
@@ -79,5 +79,18 @@ export function prepararDatosGrafico(gastos, cotizaciones) {
     const porcentajesCategorias = calcularPorcentajesCategorias(gastosCategorias, totalUSD);
 
     return porcentajesCategorias;
-
 };
+
+
+// aquí tenemos la función que se encarga de calcular hace cuanto tiempo se hicieron los gastos
+// para poder mostrar el dashboard de suma de gastos en los último x meses, usamos esto
+export function calcularGastosPeriodo(periodo, gastos) {
+    const today = new Date(); // seleccionamos la fecha de hoy pa
+    const fechaLimite = today.setMonth(today.getMonth() - periodo); // restamos tres meses al mes actual, para usar esta fecha como referencia de corte
+
+    const gastosPeriodo = gastos.filter((gasto) => { return new Date(gasto.fecha) >= fechaLimite })
+    
+    const total = calcularTotalUSD(gastosPeriodo, obtenerCotizaciones());
+
+    return total.toFixed(1);
+}

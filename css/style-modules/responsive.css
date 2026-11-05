@@ -1,17 +1,21 @@
 /* Tablet: abandonar el lateral antes de que el formulario se comprima. */
 @media (max-width: 58rem) {
   .app-layout { grid-template-columns: minmax(0, 1fr); }
-  .dashboards {
-    position: static;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-  }
-  .dashboards:has(#grafico-gastos[hidden]) { grid-template-columns: minmax(0, 1fr); }
+  .dashboards { position: static; }
   #grafico-gastos { height: 19rem; }
   .gastos-list-block { padding-block-start: var(--separacion); }
 }
 
 /* Una columna: mismas áreas, sin cambios en el orden funcional del HTML. */
 @media (max-width: 45rem) {
+  .dashboards.visible {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "cotizaciones" "moneda" "grafico" "totales";
+  }
+  .dashboards.visible:not(:has(#cotizacion-oficial > h2)) {
+    grid-template-areas: "moneda" "grafico" "totales";
+  }
+
   #gastos-form {
     grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
@@ -35,11 +39,10 @@
 
 /* Teléfonos: resumen compacto y filas del registro en dos columnas. */
 @media (max-width: 35rem) {
-  .dashboards { grid-template-columns: minmax(0, 1fr); }
   #gastos-moneda { padding: var(--esp-4); }
   #grafico-gastos { height: 21rem; }
-  .header-list { gap: var(--esp-2) var(--esp-3); }
-  .header-list li:last-child { width: 100%; }
+  #gastos-totales { padding: var(--esp-4); }
+  .header-list li:first-child { flex-basis: 100%; margin-inline-end: 0; }
 
   .gastos-list > div {
     grid-template-columns: minmax(0, 1fr) max-content;
