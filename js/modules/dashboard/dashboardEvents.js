@@ -1,7 +1,13 @@
 import { renderTotalGastos, renderTotalMoneda } from "./renderDashboards.js";
-import { calcularGastosPeriodo, calcularTotalMonedas } from "./calculos.js";
-import { obtenerGastos } from "../gastos/gastos.js";
+import { renderGraficoPeriodo } from "./renderDashboards.js";
+import {
+    calcularGastosPeriodo,
+    calcularTotalesGrafico,
+    calcularTotalMonedas,
+    convertirUSD
+} from "./calculos.js";
 
+import { obtenerGastos } from "../gastos/gastos.js";
 const dashboardTotalMoneda = document.querySelector('#formulario-gastos-moneda');
 const monedasValidas = dashboardTotalMoneda.querySelector('#monedas')
 
@@ -16,19 +22,25 @@ export function actualizarTotalMonedas() {
 
 export function initFiltroPeriodo() {
     const totalGastos = document.querySelector('#gastos-totales');
+    const botones = document.querySelectorAll('#gastos-totales button')
+    botones[0].classList.add('activo')
     let periodo = 1;
+
     totalGastos.addEventListener('click', (event) => {
+        botones.forEach((b) => { b.classList.remove('activo') })
         const boton = event.target;
+        boton.classList.add('activo')
         if(!(boton.dataset.periodo)) { return }
         periodo = Number(boton.dataset.periodo);
         
         calcularPeriodo(periodo)
     });
 
-    return () => calcularPeriodo;
+    return () => calcularPeriodo(periodo);
 }
-
 
 function calcularPeriodo(periodo) { 
     renderTotalGastos(calcularGastosPeriodo(periodo, obtenerGastos())) // funcion para evitar duplicar logica en la función initFiltroperiodo
+    const datos = calcularTotalesGrafico(periodo, obtenerGastos(), convertirUSD);
+    renderGraficoPeriodo(datos);
 }

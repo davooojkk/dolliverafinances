@@ -71,7 +71,12 @@
   padding: var(--esp-4);
 }
 
-#grafico-categorias { display: block; max-width: 100%; margin-inline: auto; }
+#grafico-categorias {
+    display: block;
+    width: 100% !important;
+    height: 100% !important;
+    margin: 0;
+}
 
 /* Estado vacío del gráfico: mensaje centrado sin datos detrás. */
 #grafico-gastos p:not([hidden]) {
@@ -97,3 +102,19 @@
 
 #grafico-gastos:has(p:not([hidden])) canvas { visibility: hidden; }
 #grafico-gastos[hidden] { display: none; }
+
+#gastos-totales button.activo {
+    background-color: #59b4bb;
+    color: #171b1e;
+    border-color: #59b4bb;
+    font-weight: 600;
+}
+
+
+.container-grafico {
+  grid-column: 1 / -1;
+  position: relative;
+  width: 100%;
+  height: 220px;
+  min-width: 0;
+}

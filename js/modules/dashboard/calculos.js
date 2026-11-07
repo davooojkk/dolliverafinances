@@ -12,7 +12,7 @@ export function calcularTotalMonedas(gastos, moneda) {
     return totalMoneda;
 }
 
-function convertirUSD(gasto, cotizaciones) {
+export function convertirUSD(gasto, cotizaciones) {
     if(gasto.moneda.toLowerCase() === 'usd') {
         return gasto.monto;
     }
@@ -93,4 +93,48 @@ export function calcularGastosPeriodo(periodo, gastos) {
     const total = calcularTotalUSD(gastosPeriodo, obtenerCotizaciones());
 
     return total.toFixed(1);
+}
+
+export function calcularTotalesGrafico(periodo, gastos, convertirUSD) {
+    const gastosPorMes = {};
+    const gastosPorSemana = {};
+    const today = new Date();
+    const fechaLimite = new Date(today);
+    fechaLimite.setMonth(fechaLimite.getMonth() - periodo);
+    fechaLimite.setHours(0, 0, 0, 0);
+
+    const gastosPeriodo = gastos.filter((gasto) => { 
+        const fecha = new Date(`${gasto.fecha}T00:00:00`);
+        return (fecha >= fechaLimite && fecha <= today)})
+
+    for (const gasto of gastosPeriodo) {
+        if(periodo === 1) {
+            const diasAtras = (today - new Date(gasto.fecha)) / 86400000;
+            if(diasAtras > 28) { continue }
+
+            const posicion = 28 - diasAtras
+
+            const semana = `Semana ${Math.floor(posicion / 7) + 1}`
+
+            if(!(semana in gastosPorSemana)) {
+            gastosPorSemana[semana] = 0;
+        } 
+
+            gastosPorSemana[semana] += convertirUSD(gasto, obtenerCotizaciones());
+
+        }
+
+        const mes = gasto.fecha.split('-').slice(0,2).join('-');
+    
+
+        if(!(mes in gastosPorMes)) {
+            gastosPorMes[mes] = 0;
+        } 
+
+    gastosPorMes[mes] += convertirUSD(gasto, obtenerCotizaciones());
+    }
+
+    if(periodo === 1) { return gastosPorSemana; }       
+    
+    return gastosPorMes;
 }

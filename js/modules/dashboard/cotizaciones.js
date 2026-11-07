@@ -1,3 +1,5 @@
+import { obtenerGastos } from "../gastos/gastos.js";
+
 let cotizacionesActuales = null;
 
 async function cotizacionDolar() {
